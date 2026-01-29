@@ -146,7 +146,7 @@ function MapController({
   useEffect(() => {
     onRecenterRef.current = () => {
       if (position) {
-        map.flyTo(position, 16, { duration: 1 });
+        map.flyTo(position, 12, { duration: 1 });
       }
     };
   }, [map, position, onRecenterRef]);
@@ -241,7 +241,7 @@ export function MapPage() {
   // Calculate initial center and bounds
   const getInitialPosition = (): { center: [number, number]; zoom: number } => {
     if (userPosition) {
-      return { center: userPosition, zoom: 14 };
+      return { center: userPosition, zoom: 6 };
     }
 
     if (places.length > 0) {
@@ -249,11 +249,11 @@ export function MapPage() {
       const lngs = places.map((p) => p.longitude);
       const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2;
       const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2;
-      return { center: [centerLat, centerLng], zoom: 12 };
+      return { center: [centerLat, centerLng], zoom: 5 };
     }
 
-    // Default to Paris
-    return { center: [48.8566, 2.3522], zoom: 5 };
+    // Default to France/Europe view
+    return { center: [46.6, 2.5], zoom: 5 };
   };
 
   const { center, zoom } = getInitialPosition();

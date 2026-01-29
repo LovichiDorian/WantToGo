@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Map, List, Plus, Settings, MapPin } from 'lucide-react';
+import { Map, List, Plus, Settings, MapPin, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { OfflineBanner } from '@/features/offline/components/OfflineBanner';
 import { UpdatePrompt } from '@/features/pwa/components/UpdatePrompt';
@@ -50,8 +50,8 @@ export function AppLayout() {
         className={cn(
           "flex-1",
           isMapPage 
-            ? "fixed inset-0 top-14 bottom-20" 
-            : "pt-14 pb-20 px-4 max-w-screen-xl mx-auto w-full"
+            ? "fixed inset-0 top-14 bottom-16" 
+            : "pt-14 pb-16 px-4 max-w-screen-xl mx-auto w-full"
         )}
       >
         <Outlet />
@@ -59,63 +59,77 @@ export function AppLayout() {
 
       {/* Modern Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 pb-safe">
-        <div className="mx-3 mb-3 rounded-2xl bg-background/90 backdrop-blur-xl border border-border/50 shadow-xl shadow-black/5">
-          <div className="flex h-16 items-center justify-between px-6 relative">
+        <div className="mx-2 mb-2 rounded-xl bg-background/90 backdrop-blur-xl border border-border/50 shadow-lg shadow-black/5">
+          <div className="flex h-12 items-center justify-between px-4 relative">
             {/* Left side: Map and Places */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-5">
               <NavLink
                 to="/map"
                 className={({ isActive }) =>
                   cn(
-                    'flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl transition-all duration-200',
+                    'flex flex-col items-center justify-center gap-0.5 py-1 rounded-lg transition-all duration-200',
                     isActive
                       ? 'text-primary'
                       : 'text-muted-foreground hover:text-foreground'
                   )
                 }
               >
-                <Map className="h-5 w-5" />
-                <span className="text-[10px] font-medium">{t('nav.map')}</span>
+                <Map className="h-4 w-4" />
+                <span className="text-[9px] font-medium">{t('nav.map')}</span>
               </NavLink>
               <NavLink
                 to="/places"
                 className={({ isActive }) =>
                   cn(
-                    'flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl transition-all duration-200',
+                    'flex flex-col items-center justify-center gap-0.5 py-1 rounded-lg transition-all duration-200',
                     isActive
                       ? 'text-primary'
                       : 'text-muted-foreground hover:text-foreground'
                   )
                 }
               >
-                <List className="h-5 w-5" />
-                <span className="text-[10px] font-medium">{t('nav.places')}</span>
+                <List className="h-4 w-4" />
+                <span className="text-[9px] font-medium">{t('nav.places')}</span>
               </NavLink>
             </div>
 
             {/* Center: Add button (elevated) */}
             <NavLink
               to="/add"
-              className="absolute left-1/2 -translate-x-1/2 -top-5 flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-full shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-transform"
+              className="absolute left-1/2 -translate-x-1/2 -top-3 flex items-center justify-center w-10 h-10 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-full shadow-md shadow-primary/25 hover:scale-105 active:scale-95 transition-transform"
             >
-              <Plus className="h-7 w-7" />
+              <Plus className="h-5 w-5" />
             </NavLink>
 
-            {/* Right side: Settings */}
-            <div className="flex items-center gap-6">
+            {/* Right side: Friends and Settings */}
+            <div className="flex items-center gap-5">
               <NavLink
-                to="/settings"
+                to="/friends"
                 className={({ isActive }) =>
                   cn(
-                    'flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl transition-all duration-200',
+                    'flex flex-col items-center justify-center gap-0.5 py-1 rounded-lg transition-all duration-200',
                     isActive
                       ? 'text-primary'
                       : 'text-muted-foreground hover:text-foreground'
                   )
                 }
               >
-                <Settings className="h-5 w-5" />
-                <span className="text-[10px] font-medium">{t('nav.settings')}</span>
+                <Users className="h-4 w-4" />
+                <span className="text-[9px] font-medium">{t('nav.friends')}</span>
+              </NavLink>
+              <NavLink
+                to="/settings"
+                className={({ isActive }) =>
+                  cn(
+                    'flex flex-col items-center justify-center gap-0.5 py-1 rounded-lg transition-all duration-200',
+                    isActive
+                      ? 'text-primary'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )
+                }
+              >
+                <Settings className="h-4 w-4" />
+                <span className="text-[9px] font-medium">{t('nav.settings')}</span>
               </NavLink>
             </div>
           </div>

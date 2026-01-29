@@ -28,7 +28,6 @@ import { usePlaces } from '@/features/places/hooks/usePlaces';
 import { useAuth } from '@/features/auth/AuthContext';
 import { useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { FriendsSection } from '@/features/friends/components/FriendsSection';
 
 /**
  * Modern Settings page with grouped sections
@@ -568,9 +567,6 @@ export function SettingsPage() {
           </div>
         </div>
       </section>
-
-      {/* Friends Section */}
-      <FriendsSection />
 
       {/* App Info */}
       <section className="text-center pt-4">

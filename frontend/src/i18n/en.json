@@ -15,6 +15,7 @@
     "places": "Places",
     "map": "Map",
     "add": "Add",
+    "friends": "Friends",
     "settings": "Settings"
   },
   "places": {
@@ -113,11 +114,14 @@
     "title": "Friends",
     "addFriend": "Add a friend",
     "noFriends": "No friends added",
-    "noFriendsDescription": "Add a friend with their code to see their places",
+    "noFriendsDescription": "Add a friend with their code to see their places on your map",
     "myCode": "My share code",
+    "myFriends": "My friends",
+    "shareCodeDescription": "Share this code so your friends can see your places",
     "copy": "Copy",
     "copied": "Copied!",
-    "enterCode": "Enter your friend's code",
+    "share": "Share",
+    "enterCode": "Friend's code",
     "deleteFriend": "Delete",
     "deleteConfirmTitle": "Delete this friend?",
     "deleteConfirmDescription": "{{name}}'s places will be removed from your map.",
@@ -126,7 +130,7 @@
     "hideOnMap": "Hide friends",
     "friendAdded": "{{name}} added with {{count}} place(s)",
     "codeNotFound": "Invalid code or friend not found",
-    "refresh": "Refresh friends' places"
+    "refresh": "Refresh"
   },
   "auth": {
     "login": "Log in",

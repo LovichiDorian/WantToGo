@@ -15,6 +15,7 @@
     "places": "Lieux",
     "map": "Carte",
     "add": "Ajouter",
+    "friends": "Amis",
     "settings": "Paramètres"
   },
   "places": {
@@ -113,11 +114,14 @@
     "title": "Amis",
     "addFriend": "Ajouter un ami",
     "noFriends": "Aucun ami ajouté",
-    "noFriendsDescription": "Ajoutez un ami avec son code pour voir ses lieux",
+    "noFriendsDescription": "Ajoutez un ami avec son code pour voir ses lieux sur votre carte",
     "myCode": "Mon code de partage",
+    "myFriends": "Mes amis",
+    "shareCodeDescription": "Partagez ce code pour que vos amis puissent voir vos lieux",
     "copy": "Copier",
     "copied": "Copié !",
-    "enterCode": "Entrez le code de votre ami",
+    "share": "Partager",
+    "enterCode": "Code de votre ami",
     "deleteFriend": "Supprimer",
     "deleteConfirmTitle": "Supprimer cet ami ?",
     "deleteConfirmDescription": "Les lieux de {{name}} seront supprimés de votre carte.",
@@ -126,7 +130,7 @@
     "hideOnMap": "Masquer les amis",
     "friendAdded": "{{name}} ajouté avec {{count}} lieu(x)",
     "codeNotFound": "Code invalide ou ami introuvable",
-    "refresh": "Actualiser les lieux des amis"
+    "refresh": "Actualiser"
   },
   "auth": {
     "login": "Se connecter",
