@@ -6,6 +6,7 @@ import {
   Laptop, 
   Globe, 
   Bell, 
+  BellRing,
   Trash2, 
   RefreshCw,
   Cloud,
@@ -17,15 +18,16 @@ import {
   Upload,
   Check,
   User,
-  LogOut
+  LogOut,
+  X
 } from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSync } from '@/features/offline/hooks/useSync';
 import { useOnlineStatus } from '@/features/offline/hooks/useOnlineStatus';
 import { usePlaces } from '@/features/places/hooks/usePlaces';
 import { useAuth } from '@/features/auth/AuthContext';
+import { useNotifications } from '@/features/notifications/hooks/useNotifications';
 import { useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -40,10 +42,14 @@ export function SettingsPage() {
   const isOnline = useOnlineStatus();
   const { places, createPlace } = usePlaces();
   const { user, logout } = useAuth();
-  const [notificationsEnabled, setNotificationsEnabled] = useState(
-    typeof Notification !== 'undefined' && Notification.permission === 'granted'
-  );
+  const { 
+    permission, 
+    isSupported, 
+    requestPermission, 
+    showNotification 
+  } = useNotifications();
   const [isClearing, setIsClearing] = useState(false);
+  const [notificationTestSent, setNotificationTestSent] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [shareStatus, setShareStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -58,13 +64,23 @@ export function SettingsPage() {
     i18n.changeLanguage(lang);
   };
 
-  const handleNotificationsToggle = async (enabled: boolean) => {
-    if (enabled && typeof Notification !== 'undefined') {
-      const permission = await Notification.requestPermission();
-      setNotificationsEnabled(permission === 'granted');
-    } else {
-      setNotificationsEnabled(false);
+  const handleEnableNotifications = async () => {
+    const granted = await requestPermission();
+    if (granted) {
+      showNotification('Notifications activées', {
+        body: 'Vous recevrez des notifications de WannaGo',
+        tag: 'notifications-enabled',
+      });
     }
+  };
+
+  const handleTestNotification = () => {
+    showNotification('Test de notification', {
+      body: 'Les notifications WannaGo fonctionnent parfaitement ! 🎉',
+      tag: 'test-notification',
+    });
+    setNotificationTestSent(true);
+    setTimeout(() => setNotificationTestSent(false), 3000);
   };
 
   const handleClearCache = async () => {
@@ -370,20 +386,84 @@ export function SettingsPage() {
           {t('settings.notifications')}
         </h2>
         
-        <div className="bg-card rounded-2xl border border-border/50 p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/15 to-amber-500/5 flex items-center justify-center">
-              <Bell className="h-5 w-5 text-amber-500" />
+        <div className="bg-card rounded-2xl border border-border/50 divide-y divide-border/50">
+          {/* Notification Status */}
+          <div className="p-4">
+            <div className="flex items-center gap-3">
+              <div className={cn(
+                "w-10 h-10 rounded-xl flex items-center justify-center",
+                permission === 'granted'
+                  ? "bg-gradient-to-br from-green-500/15 to-green-500/5"
+                  : permission === 'denied'
+                  ? "bg-gradient-to-br from-red-500/15 to-red-500/5"
+                  : "bg-gradient-to-br from-amber-500/15 to-amber-500/5"
+              )}>
+                {permission === 'granted' ? (
+                  <Bell className="h-5 w-5 text-green-500" />
+                ) : permission === 'denied' ? (
+                  <X className="h-5 w-5 text-red-500" />
+                ) : (
+                  <Bell className="h-5 w-5 text-amber-500" />
+                )}
+              </div>
+              <div className="flex-1">
+                <p className="font-medium">{t('settings.enableNotifications')}</p>
+                <p className="text-sm text-muted-foreground">
+                  {!isSupported 
+                    ? t('settings.notificationsNotSupported')
+                    : permission === 'granted' 
+                    ? t('settings.notificationsEnabled')
+                    : permission === 'denied'
+                    ? t('settings.notificationsDenied')
+                    : t('settings.notificationsDescription')
+                  }
+                </p>
+              </div>
+              {isSupported && permission !== 'granted' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleEnableNotifications}
+                  disabled={permission === 'denied'}
+                  className="rounded-xl gap-2"
+                >
+                  <Bell className="h-4 w-4" />
+                  {t('settings.enable')}
+                </Button>
+              )}
+              {permission === 'granted' && (
+                <Check className="h-5 w-5 text-green-500" />
+              )}
             </div>
-            <div className="flex-1">
-              <p className="font-medium">{t('settings.enableNotifications')}</p>
-              <p className="text-sm text-muted-foreground">{t('settings.notificationsDescription')}</p>
-            </div>
-            <Switch
-              checked={notificationsEnabled}
-              onCheckedChange={handleNotificationsToggle}
-            />
           </div>
+
+          {/* Test Notification */}
+          {permission === 'granted' && (
+            <div className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/15 to-violet-500/5 flex items-center justify-center">
+                  <BellRing className="h-5 w-5 text-violet-500" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium">{t('settings.testNotification')}</p>
+                  <p className="text-sm text-muted-foreground">{t('settings.testNotificationDescription')}</p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleTestNotification}
+                  className="rounded-xl gap-2"
+                >
+                  {notificationTestSent ? (
+                    <Check className="h-4 w-4 text-green-500" />
+                  ) : (
+                    <BellRing className="h-4 w-4" />
+                  )}
+                  {notificationTestSent ? t('settings.sent') : t('settings.test')}
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
