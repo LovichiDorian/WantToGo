@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  places    Place[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Place {
+  id          String    @id @default(uuid())
+  clientId    String?   // Temporary ID from client for reconciliation
+  userId      String    
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name        String
+  notes       String?   @db.Text
+  latitude    Float
+  longitude   Float
+  address     String?
+  tripDate    DateTime?
+  
+  photos      Photo[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime? // Soft delete for sync
+
+  @@index([userId])
+  @@index([updatedAt])
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  placeId   String
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  
+  filename  String   // Storage path or URL
+  mimeType  String
+  size      Int      
+  
+  createdAt DateTime @default(now())
+
+  @@index([placeId])
+}

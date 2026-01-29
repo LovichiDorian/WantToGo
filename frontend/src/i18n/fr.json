@@ -1,0 +1,100 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "loading": "Chargement...",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "goBack": "Retour",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "nav": {
+    "places": "Lieux",
+    "map": "Carte",
+    "add": "Ajouter",
+    "settings": "Paramètres"
+  },
+  "places": {
+    "title": "Mes lieux",
+    "addNew": "Ajouter un lieu",
+    "editPlace": "Modifier le lieu",
+    "noPlaces": "Aucun lieu enregistré",
+    "noPlacesDescription": "Commencez par ajouter votre premier lieu à visiter !",
+    "noSearchResults": "Aucun lieu ne correspond à votre recherche",
+    "searchPlaceholder": "Rechercher des lieux...",
+    "useCurrentLocation": "Utiliser ma position actuelle",
+    "pickOnMap": "Choisir sur la carte",
+    "savedOffline": "Enregistré hors ligne – sera synchronisé au retour du réseau",
+    "notFound": "Lieu introuvable",
+    "name": "Nom",
+    "namePlaceholder": "Entrez le nom du lieu",
+    "location": "Localisation",
+    "address": "Adresse",
+    "addressPlaceholder": "Rue, ville, pays",
+    "plannedDate": "Date du voyage prévu",
+    "notes": "Notes",
+    "notesPlaceholder": "Ajoutez des notes sur ce lieu...",
+    "photos": "Photos",
+    "camera": "Appareil photo",
+    "gallery": "Galerie",
+    "openInMaps": "Ouvrir dans Maps",
+    "deleteConfirmTitle": "Supprimer ce lieu ?",
+    "deleteConfirmDescription": "\"{{name}}\" sera supprimé définitivement. Cette action est irréversible."
+  },
+  "map": {
+    "title": "Carte",
+    "dragToAdjust": "Glissez le marqueur pour ajuster la position",
+    "selectLocation": "Sélectionner un emplacement",
+    "yourLocation": "Vous êtes ici",
+    "viewDetails": "Voir les détails",
+    "noPlaces": "Ajoutez votre premier lieu pour le voir sur la carte",
+    "recenter": "Recentrer"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "appearance": "Apparence",
+    "appearanceDescription": "Personnalisez l'apparence de l'application",
+    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système",
+    "language": "Langue",
+    "notifications": "Notifications",
+    "notificationsDescription": "Recevez des notifications sur l'état de synchronisation et les rappels",
+    "enableNotifications": "Activer les notifications",
+    "sync": "Synchronisation",
+    "syncDescription": "Gérez la synchronisation de vos données hors ligne",
+    "syncNow": "Synchroniser",
+    "pendingChanges": "Modifications en attente",
+    "pendingCount": "{{count}} modifications en attente de synchronisation",
+    "allSynced": "Toutes les données sont synchronisées",
+    "offlineWarning": "Vous êtes hors ligne. La synchronisation reprendra une fois connecté.",
+    "dataManagement": "Gestion des données",
+    "clearCache": "Vider le cache",
+    "clearCacheDescription": "Cela effacera les données en cache. Vos lieux seront re-téléchargés une fois en ligne."
+  },
+  "pwa": {
+    "install": "Installer l'application",
+    "updateAvailable": "Une nouvelle version est disponible",
+    "updateNow": "Mettre à jour maintenant",
+    "installed": "Merci d'avoir installé WantToGo !"
+  },
+  "offline": {
+    "youAreOffline": "Vous êtes hors ligne",
+    "syncing": "Synchronisation...",
+    "syncComplete": "Synchronisation terminée",
+    "syncFailed": "Échec de la synchronisation"
+  },
+  "camera": {
+    "permissionDenied": "Accès à la caméra refusé. Veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur.",
+    "notFound": "Aucune caméra trouvée sur cet appareil.",
+    "error": "Échec de l'accès à la caméra. Veuillez réessayer."
+  },
+  "validation": {
+    "nameRequired": "Le nom est obligatoire",
+    "locationRequired": "Veuillez sélectionner un emplacement"
+  }
+}

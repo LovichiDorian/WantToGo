@@ -1,0 +1,86 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useRegisterSW } from 'virtual:pwa-register/react';
+
+type ServiceWorkerState = 'pending' | 'installed' | 'activated' | 'error';
+
+interface UseServiceWorkerReturn {
+  isActive: boolean;
+  isUpdateAvailable: boolean;
+  state: ServiceWorkerState;
+  updateServiceWorker: () => void;
+}
+
+/**
+ * Hook to manage Service Worker lifecycle and updates using vite-plugin-pwa
+ */
+export function useServiceWorker(): UseServiceWorkerReturn {
+  const [state, setState] = useState<ServiceWorkerState>('pending');
+
+  const {
+    needRefresh: [needRefresh, setNeedRefresh],
+    offlineReady: [offlineReady],
+    updateServiceWorker,
+  } = useRegisterSW({
+    onRegistered(registration) {
+      console.log('[App] Service Worker registered');
+      if (registration) {
+        setState('installed');
+      }
+    },
+    onRegisterError(error) {
+      console.error('[App] Service Worker registration failed:', error);
+      setState('error');
+    },
+    onNeedRefresh() {
+      console.log('[App] New service worker available, update needed');
+    },
+    onOfflineReady() {
+      console.log('[App] Service worker installed, app ready for offline use');
+      setState('activated');
+    },
+  });
+
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) {
+      setState('error');
+      return;
+    }
+
+    // Listen for controller change (update applied)
+    let refreshing = false;
+    const handleControllerChange = () => {
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
+    };
+
+    navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+
+    // Listen for messages from SW
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'SYNC_REQUESTED') {
+        window.dispatchEvent(new CustomEvent('sw-sync-requested'));
+      }
+    };
+
+    navigator.serviceWorker.addEventListener('message', handleMessage);
+
+    return () => {
+      navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+      navigator.serviceWorker.removeEventListener('message', handleMessage);
+    };
+  }, []);
+
+  const handleUpdate = useCallback(() => {
+    updateServiceWorker(true);
+    setNeedRefresh(false);
+  }, [updateServiceWorker, setNeedRefresh]);
+
+  return {
+    isActive: offlineReady || state === 'activated',
+    isUpdateAvailable: needRefresh,
+    state,
+    updateServiceWorker: handleUpdate,
+  };
+}

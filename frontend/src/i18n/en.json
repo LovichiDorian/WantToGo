@@ -1,0 +1,100 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "close": "Close",
+    "confirm": "Confirm",
+    "goBack": "Go back",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "places": "Places",
+    "map": "Map",
+    "add": "Add",
+    "settings": "Settings"
+  },
+  "places": {
+    "title": "My Places",
+    "addNew": "Add a place",
+    "editPlace": "Edit place",
+    "noPlaces": "No places saved yet",
+    "noPlacesDescription": "Start by adding your first place to visit!",
+    "noSearchResults": "No places found matching your search",
+    "searchPlaceholder": "Search places...",
+    "useCurrentLocation": "Use current location",
+    "pickOnMap": "Pick on map",
+    "savedOffline": "Saved offline – will sync when online",
+    "notFound": "Place not found",
+    "name": "Name",
+    "namePlaceholder": "Enter place name",
+    "location": "Location",
+    "address": "Address",
+    "addressPlaceholder": "Street, city, country",
+    "plannedDate": "Planned trip date",
+    "notes": "Notes",
+    "notesPlaceholder": "Add notes about this place...",
+    "photos": "Photos",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "openInMaps": "Open in Maps",
+    "deleteConfirmTitle": "Delete this place?",
+    "deleteConfirmDescription": "\"{{name}}\" will be permanently deleted. This action cannot be undone."
+  },
+  "map": {
+    "title": "Map",
+    "dragToAdjust": "Drag marker to adjust location",
+    "selectLocation": "Select location",
+    "yourLocation": "You are here",
+    "viewDetails": "View details",
+    "noPlaces": "Add your first place to see it on the map",
+    "recenter": "Recenter"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "appearanceDescription": "Customize how the app looks",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "language": "Language",
+    "notifications": "Notifications",
+    "notificationsDescription": "Get notified about sync status and reminders",
+    "enableNotifications": "Enable notifications",
+    "sync": "Synchronization",
+    "syncDescription": "Manage your offline data synchronization",
+    "syncNow": "Sync now",
+    "pendingChanges": "Pending changes",
+    "pendingCount": "{{count}} changes waiting to sync",
+    "allSynced": "All data is synced",
+    "offlineWarning": "You're offline. Sync will resume when connected.",
+    "dataManagement": "Data management",
+    "clearCache": "Clear cache",
+    "clearCacheDescription": "This will clear cached data. Your places will be re-downloaded when you're online."
+  },
+  "pwa": {
+    "install": "Install App",
+    "updateAvailable": "A new version is available",
+    "updateNow": "Update now",
+    "installed": "Thanks for installing WantToGo!"
+  },
+  "offline": {
+    "youAreOffline": "You are offline",
+    "syncing": "Syncing...",
+    "syncComplete": "Sync complete",
+    "syncFailed": "Sync failed"
+  },
+  "camera": {
+    "permissionDenied": "Camera permission denied. Please allow camera access in your browser settings.",
+    "notFound": "No camera found on this device.",
+    "error": "Failed to access camera. Please try again."
+  },
+  "validation": {
+    "nameRequired": "Name is required",
+    "locationRequired": "Please select a location"
+  }
+}
