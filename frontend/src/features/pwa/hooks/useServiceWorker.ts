@@ -10,8 +10,12 @@ interface UseServiceWorkerReturn {
   updateServiceWorker: () => void;
 }
 
+// Intervalle de vérification des mises à jour (toutes les 60 secondes)
+const UPDATE_CHECK_INTERVAL = 60 * 1000;
+
 /**
  * Hook to manage Service Worker lifecycle and updates using vite-plugin-pwa
+ * Mode autoUpdate: les mises à jour sont appliquées automatiquement
  */
 export function useServiceWorker(): UseServiceWorkerReturn {
   const [state, setState] = useState<ServiceWorkerState>('pending');
@@ -21,10 +25,17 @@ export function useServiceWorker(): UseServiceWorkerReturn {
     offlineReady: [offlineReady],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegistered(registration) {
-      console.log('[App] Service Worker registered');
+    // Vérifie les mises à jour périodiquement
+    onRegisteredSW(swUrl, registration) {
+      console.log('[App] Service Worker registered:', swUrl);
       if (registration) {
         setState('installed');
+        
+        // Vérifie les mises à jour périodiquement
+        setInterval(() => {
+          console.log('[App] Checking for SW updates...');
+          registration.update();
+        }, UPDATE_CHECK_INTERVAL);
       }
     },
     onRegisterError(error) {
@@ -32,7 +43,9 @@ export function useServiceWorker(): UseServiceWorkerReturn {
       setState('error');
     },
     onNeedRefresh() {
-      console.log('[App] New service worker available, update needed');
+      console.log('[App] New version available, reloading...');
+      // En mode autoUpdate, on recharge automatiquement
+      updateServiceWorker(true);
     },
     onOfflineReady() {
       console.log('[App] Service worker installed, app ready for offline use');
@@ -51,6 +64,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
     const handleControllerChange = () => {
       if (!refreshing) {
         refreshing = true;
+        console.log('[App] New SW controller, reloading page...');
         window.location.reload();
       }
     };

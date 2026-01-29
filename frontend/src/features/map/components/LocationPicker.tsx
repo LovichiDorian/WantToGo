@@ -160,10 +160,15 @@ export function LocationPicker({
         zoom={15}
         className="h-full w-full"
         zoomControl={false}
+        maxBounds={[[-90, -180], [90, 180]]}
+        maxBoundsViscosity={1.0}
+        minZoom={2}
+        worldCopyJump={false}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          noWrap={true}
         />
         <DraggableMarker position={position} onPositionChange={handlePositionChange} />
         <MapClickHandler onLocationChange={handlePositionChange} />

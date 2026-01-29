@@ -2,6 +2,24 @@
  * Shared types between frontend and backend
  */
 
+export interface Friend {
+  id: string;
+  name: string;
+  color: string;
+  places: FriendPlace[];
+  addedAt: string;
+}
+
+export interface FriendPlace {
+  id: string;
+  name: string;
+  notes?: string;
+  latitude: number;
+  longitude: number;
+  address?: string;
+  tripDate?: string;
+}
+
 export interface Place {
   id: string;
   serverId?: string;

@@ -74,7 +74,19 @@
     "offlineWarning": "You're offline. Sync will resume when connected.",
     "dataManagement": "Data management",
     "clearCache": "Clear cache",
-    "clearCacheDescription": "This will clear cached data. Your places will be re-downloaded when you're online."
+    "clearCacheDescription": "This will clear cached data. Your places will be re-downloaded when you're online.",
+    "share": "Share",
+    "shareDescription": "Share your places with other users",
+    "exportPlaces": "Export my places",
+    "exportDescription": "Download all your places as a JSON file",
+    "importPlaces": "Import places",
+    "importDescription": "Import places from a JSON file",
+    "sharePlaces": "Share my places",
+    "shareVia": "Share via...",
+    "exportSuccess": "{{count}} places exported successfully",
+    "importSuccess": "{{count}} places imported successfully",
+    "importError": "Error importing file",
+    "noPlacesToExport": "No places to export"
   },
   "pwa": {
     "install": "Install App",
@@ -96,5 +108,42 @@
   "validation": {
     "nameRequired": "Name is required",
     "locationRequired": "Please select a location"
+  },
+  "friends": {
+    "title": "Friends",
+    "addFriend": "Add a friend",
+    "noFriends": "No friends added",
+    "noFriendsDescription": "Add a friend with their code to see their places",
+    "myCode": "My share code",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "enterCode": "Enter your friend's code",
+    "deleteFriend": "Delete",
+    "deleteConfirmTitle": "Delete this friend?",
+    "deleteConfirmDescription": "{{name}}'s places will be removed from your map.",
+    "places": "place(s)",
+    "showOnMap": "Show friends",
+    "hideOnMap": "Hide friends",
+    "friendAdded": "{{name}} added with {{count}} place(s)",
+    "codeNotFound": "Invalid code or friend not found",
+    "refresh": "Refresh friends' places"
+  },
+  "auth": {
+    "login": "Log in",
+    "loginSubtitle": "Log in to access your places",
+    "register": "Sign up",
+    "registerSubtitle": "Create your WantToGo account",
+    "logout": "Log out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "name": "Name (optional)",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "invalidCredentials": "Invalid email or password",
+    "emailExists": "This email is already registered",
+    "registerError": "Registration failed",
+    "passwordMismatch": "Passwords don't match",
+    "passwordTooShort": "Password must be at least 6 characters"
   }
 }

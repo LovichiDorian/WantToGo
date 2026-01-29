@@ -8,6 +8,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PlacesModule } from './modules/places/places.module';
 import { SyncModule } from './modules/sync/sync.module';
 import { PhotosModule } from './modules/photos/photos.module';
+import { FriendsModule } from './modules/friends/friends.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -20,9 +22,11 @@ import { PhotosModule } from './modules/photos/photos.module';
       serveRoot: '/uploads',
     }),
     PrismaModule,
+    AuthModule,
     PlacesModule,
     SyncModule,
     PhotosModule,
+    FriendsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

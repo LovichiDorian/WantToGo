@@ -1,5 +1,5 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
-import type { Place, Photo, SyncQueueItem } from '../types';
+import type { Place, Photo, SyncQueueItem, Friend } from '../types';
 
 /**
  * IndexedDB schema for WantToGo
@@ -29,10 +29,14 @@ interface WantToGoDBSchema extends DBSchema {
       'by-entity': string;
     };
   };
+  friends: {
+    key: string;
+    value: Friend;
+  };
 }
 
 const DB_NAME = 'wanttogo-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbInstance: IDBPDatabase<WantToGoDBSchema> | null = null;
 
@@ -67,6 +71,11 @@ export async function getDB(): Promise<IDBPDatabase<WantToGoDBSchema>> {
           autoIncrement: true,
         });
         syncStore.createIndex('by-entity', 'entityId');
+      }
+
+      // Friends store
+      if (!db.objectStoreNames.contains('friends')) {
+        db.createObjectStore('friends', { keyPath: 'id' });
       }
     },
   });

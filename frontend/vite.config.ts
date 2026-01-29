@@ -10,11 +10,16 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
       includeAssets: ['icons/*.png', 'manifest.json'],
       manifest: false, // We use our own manifest.json in public/
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+        // Force le nouveau SW à prendre le contrôle immédiatement
+        skipWaiting: true,
+        clientsClaim: true,
+        // Nettoie les anciens caches au démarrage
+        cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/i,

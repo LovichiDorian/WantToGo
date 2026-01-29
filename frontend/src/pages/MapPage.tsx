@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
-import { Navigation, Plus, MapPin, ChevronRight, Loader2 } from 'lucide-react';
+import { Navigation, Plus, MapPin, ChevronRight, Loader2, Users, UsersRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePlaces } from '@/features/places/hooks/usePlaces';
+import { useFriends } from '@/features/friends/hooks/useFriends';
 import { useGeolocation } from '@/features/map/hooks/useGeolocation';
+import type { Friend, FriendPlace } from '@/lib/types';
 import 'leaflet/dist/leaflet.css';
 
 // Fix for default marker icon in react-leaflet
@@ -39,7 +41,7 @@ const userLocationIcon = L.divIcon({
   iconAnchor: [10, 10],
 });
 
-// Custom place marker
+// Custom place marker (blue for user's places)
 const placeIcon = L.divIcon({
   className: 'place-marker',
   html: `
@@ -55,20 +57,59 @@ const placeIcon = L.divIcon({
   popupAnchor: [0, -40],
 });
 
+// Create a colored marker icon for friends
+function createFriendIcon(color: string): L.DivIcon {
+  return L.divIcon({
+    className: 'friend-marker',
+    html: `
+      <div class="flex items-center justify-center w-9 h-9 rounded-full shadow-lg border-[3px] border-white transform -translate-x-1/2 -translate-y-1/2" style="background: ${color}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+    `,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36],
+  });
+}
+
 // Map controls component
 function MapControls({ 
   onRecenter, 
   onAddPlace,
-  hasUserPosition 
+  onToggleFriends,
+  hasUserPosition,
+  showFriends,
+  friendCount
 }: { 
   onRecenter: () => void; 
   onAddPlace: () => void;
+  onToggleFriends: () => void;
   hasUserPosition: boolean;
+  showFriends: boolean;
+  friendCount: number;
 }) {
   const { t } = useTranslation();
 
   return (
     <div className="absolute right-4 bottom-28 z-[1000] flex flex-col gap-3">
+      {friendCount > 0 && (
+        <Button
+          size="icon"
+          variant="secondary"
+          className={`h-12 w-12 rounded-full shadow-lg backdrop-blur-sm border border-border/50 transition-colors ${
+            showFriends 
+              ? 'bg-purple-500 hover:bg-purple-600 text-white border-purple-400' 
+              : 'bg-background/95 hover:bg-background'
+          }`}
+          onClick={onToggleFriends}
+          title={showFriends ? t('friends.hideOnMap') : t('friends.showOnMap')}
+        >
+          {showFriends ? <UsersRound className="h-5 w-5" /> : <Users className="h-5 w-5" />}
+        </Button>
+      )}
       {hasUserPosition && (
         <Button
           size="icon"
@@ -116,10 +157,14 @@ function MapController({
 // Selected place card component
 function PlaceCard({ 
   place, 
-  onViewDetails
+  onViewDetails,
+  friendName,
+  friendColor
 }: { 
   place: { id: string; name: string; address?: string | null; notes?: string | null };
-  onViewDetails: () => void;
+  onViewDetails?: () => void;
+  friendName?: string;
+  friendColor?: string;
 }) {
 
   return (
@@ -127,12 +172,24 @@ function PlaceCard({
       className="absolute left-4 right-20 bottom-28 z-[1000] animate-in slide-in-from-bottom-4 duration-300"
       onClick={onViewDetails}
     >
-      <div className="bg-background/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border/50 p-4 cursor-pointer hover:bg-background transition-colors">
+      <div className={`bg-background/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border/50 p-4 ${onViewDetails ? 'cursor-pointer hover:bg-background' : ''} transition-colors`}>
         <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-            <MapPin className="h-5 w-5 text-primary" />
+          <div 
+            className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
+            style={{ 
+              background: friendColor 
+                ? `linear-gradient(135deg, ${friendColor}30, ${friendColor}15)` 
+                : 'linear-gradient(135deg, var(--primary) / 0.2, var(--primary) / 0.1)' 
+            }}
+          >
+            <MapPin className="h-5 w-5" style={{ color: friendColor || 'var(--primary)' }} />
           </div>
           <div className="flex-1 min-w-0">
+            {friendName && (
+              <p className="text-xs font-medium mb-1" style={{ color: friendColor }}>
+                {friendName}
+              </p>
+            )}
             <h3 className="font-semibold text-foreground truncate">{place.name}</h3>
             {place.address && (
               <p className="text-sm text-muted-foreground truncate mt-0.5">{place.address}</p>
@@ -141,12 +198,17 @@ function PlaceCard({
               <p className="text-sm text-muted-foreground/70 line-clamp-1 mt-1">{place.notes}</p>
             )}
           </div>
-          <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />
+          {onViewDetails && <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />}
         </div>
       </div>
     </div>
   );
 }
+
+// Type for selected item (can be user's place or friend's place)
+type SelectedItem = 
+  | { type: 'place'; place: { id: string; name: string; address?: string | null; notes?: string | null } }
+  | { type: 'friend'; place: FriendPlace; friend: Friend };
 
 /**
  * Full-screen map page showing all places as markers
@@ -156,9 +218,11 @@ export function MapPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { places, isLoading } = usePlaces();
+  const { friends } = useFriends();
   const { latitude, longitude, getCurrentPosition } = useGeolocation();
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
-  const [selectedPlace, setSelectedPlace] = useState<typeof places[0] | null>(null);
+  const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
+  const [showFriends, setShowFriends] = useState(true);
   const mapRef = useRef<L.Map>(null);
   const recenterRef = useRef<(() => void) | null>(null);
 
@@ -202,6 +266,11 @@ export function MapPage() {
     navigate('/add');
   };
 
+  const handleToggleFriends = () => {
+    setShowFriends(!showFriends);
+    setSelectedItem(null);
+  };
+
   if (isLoading) {
     return (
       <div className="h-full flex items-center justify-center bg-muted/30">
@@ -222,10 +291,15 @@ export function MapPage() {
         className="absolute inset-0 z-0"
         ref={mapRef}
         zoomControl={false}
+        maxBounds={[[-90, -180], [90, 180]]}
+        maxBoundsViscosity={1.0}
+        minZoom={2}
+        worldCopyJump={false}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          noWrap={true}
         />
 
         {/* User location marker */}
@@ -237,17 +311,31 @@ export function MapPage() {
           </Marker>
         )}
 
-        {/* Place markers */}
+        {/* User's place markers (blue) */}
         {places.map((place) => (
           <Marker
             key={place.id}
             position={[place.latitude, place.longitude]}
             icon={placeIcon}
             eventHandlers={{
-              click: () => setSelectedPlace(place),
+              click: () => setSelectedItem({ type: 'place', place }),
             }}
           />
         ))}
+
+        {/* Friends' place markers (colored by friend) */}
+        {showFriends && friends.map((friend) =>
+          friend.places.map((place) => (
+            <Marker
+              key={`${friend.id}-${place.id}`}
+              position={[place.latitude, place.longitude]}
+              icon={createFriendIcon(friend.color)}
+              eventHandlers={{
+                click: () => setSelectedItem({ type: 'friend', place, friend }),
+              }}
+            />
+          ))
+        )}
 
         <MapController position={userPosition} onRecenterRef={recenterRef} />
       </MapContainer>
@@ -256,14 +344,24 @@ export function MapPage() {
       <MapControls 
         onRecenter={handleRecenter}
         onAddPlace={handleAddPlace}
+        onToggleFriends={handleToggleFriends}
         hasUserPosition={!!userPosition}
+        showFriends={showFriends}
+        friendCount={friends.length}
       />
 
       {/* Selected place card */}
-      {selectedPlace && (
+      {selectedItem?.type === 'place' && (
         <PlaceCard
-          place={selectedPlace}
-          onViewDetails={() => navigate(`/place/${selectedPlace.id}`)}
+          place={selectedItem.place}
+          onViewDetails={() => navigate(`/place/${selectedItem.place.id}`)}
+        />
+      )}
+      {selectedItem?.type === 'friend' && (
+        <PlaceCard
+          place={selectedItem.place}
+          friendName={selectedItem.friend.name}
+          friendColor={selectedItem.friend.color}
         />
       )}
     </div>

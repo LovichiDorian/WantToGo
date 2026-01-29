@@ -17,6 +17,8 @@ const prisma_module_1 = require("./prisma/prisma.module");
 const places_module_1 = require("./modules/places/places.module");
 const sync_module_1 = require("./modules/sync/sync.module");
 const photos_module_1 = require("./modules/photos/photos.module");
+const friends_module_1 = require("./modules/friends/friends.module");
+const auth_module_1 = require("./modules/auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -31,9 +33,11 @@ exports.AppModule = AppModule = __decorate([
                 serveRoot: '/uploads',
             }),
             prisma_module_1.PrismaModule,
+            auth_module_1.AuthModule,
             places_module_1.PlacesModule,
             sync_module_1.SyncModule,
             photos_module_1.PhotosModule,
+            friends_module_1.FriendsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

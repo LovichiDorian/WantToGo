@@ -18,21 +18,6 @@ export function AppLayout() {
 
   const isMapPage = location.pathname === '/map' || location.pathname === '/';
 
-  const navItems = [
-    { to: '/map', icon: Map, label: t('nav.map') },
-    { to: '/places', icon: List, label: t('nav.places') },
-    { to: '/add', icon: Plus, label: t('nav.add'), isAction: true },
-    { to: '/settings', icon: Settings, label: t('nav.settings') },
-  ];
-
-  // Reorder for centered + button: Map, Places, +, Settings
-  const orderedNavItems = [
-    navItems[0], // Map
-    navItems[1], // Places  
-    navItems[2], // + (center)
-    navItems[3], // Settings
-  ];
-
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Update prompt banner */}

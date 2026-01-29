@@ -74,7 +74,19 @@
     "offlineWarning": "Vous êtes hors ligne. La synchronisation reprendra une fois connecté.",
     "dataManagement": "Gestion des données",
     "clearCache": "Vider le cache",
-    "clearCacheDescription": "Cela effacera les données en cache. Vos lieux seront re-téléchargés une fois en ligne."
+    "clearCacheDescription": "Cela effacera les données en cache. Vos lieux seront re-téléchargés une fois en ligne.",
+    "share": "Partager",
+    "shareDescription": "Partagez vos lieux avec d'autres utilisateurs",
+    "exportPlaces": "Exporter mes lieux",
+    "exportDescription": "Télécharger tous vos lieux en fichier JSON",
+    "importPlaces": "Importer des lieux",
+    "importDescription": "Importer des lieux depuis un fichier JSON",
+    "sharePlaces": "Partager mes lieux",
+    "shareVia": "Partager via...",
+    "exportSuccess": "{{count}} lieux exportés avec succès",
+    "importSuccess": "{{count}} lieux importés avec succès",
+    "importError": "Erreur lors de l'import du fichier",
+    "noPlacesToExport": "Aucun lieu à exporter"
   },
   "pwa": {
     "install": "Installer l'application",
@@ -96,5 +108,42 @@
   "validation": {
     "nameRequired": "Le nom est obligatoire",
     "locationRequired": "Veuillez sélectionner un emplacement"
+  },
+  "friends": {
+    "title": "Amis",
+    "addFriend": "Ajouter un ami",
+    "noFriends": "Aucun ami ajouté",
+    "noFriendsDescription": "Ajoutez un ami avec son code pour voir ses lieux",
+    "myCode": "Mon code de partage",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "enterCode": "Entrez le code de votre ami",
+    "deleteFriend": "Supprimer",
+    "deleteConfirmTitle": "Supprimer cet ami ?",
+    "deleteConfirmDescription": "Les lieux de {{name}} seront supprimés de votre carte.",
+    "places": "lieu(x)",
+    "showOnMap": "Afficher les amis",
+    "hideOnMap": "Masquer les amis",
+    "friendAdded": "{{name}} ajouté avec {{count}} lieu(x)",
+    "codeNotFound": "Code invalide ou ami introuvable",
+    "refresh": "Actualiser les lieux des amis"
+  },
+  "auth": {
+    "login": "Se connecter",
+    "loginSubtitle": "Connectez-vous pour accéder à vos lieux",
+    "register": "S'inscrire",
+    "registerSubtitle": "Créez votre compte WantToGo",
+    "logout": "Se déconnecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "name": "Nom (optionnel)",
+    "noAccount": "Pas encore de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "invalidCredentials": "Email ou mot de passe incorrect",
+    "emailExists": "Cet email est déjà utilisé",
+    "registerError": "Erreur lors de l'inscription",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères"
   }
 }
