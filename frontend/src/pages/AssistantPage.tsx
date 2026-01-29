@@ -8,11 +8,13 @@ import {
   MapPin, 
   Plus,
   Plane,
-  Sparkles
+  Sparkles,
+  Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import * as assistantAPI from '@/lib/api/assistant';
+import { getStoredToken } from '@/lib/api/auth';
 import { usePlaces } from '@/features/places/hooks/usePlaces';
 
 interface Message {
@@ -21,14 +23,16 @@ interface Message {
   content: string;
   placeSuggestion?: assistantAPI.PlaceSuggestion | null;
   isLoading?: boolean;
+  placeAdded?: boolean;
 }
 
 export function AssistantPage() {
   const { t, i18n } = useTranslation();
-  const { createPlace } = usePlaces();
+  const { refreshPlaces } = usePlaces();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [addingPlaceId, setAddingPlaceId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -47,10 +51,19 @@ export function AssistantPage() {
     }
   }, [i18n.language, messages.length]);
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom and focus input
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Focus input after each message update (with small delay for mobile)
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
   }, [messages]);
+
+  // Focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -117,15 +130,39 @@ export function AssistantPage() {
     }
   };
 
-  const handleAddPlace = async (suggestion: assistantAPI.PlaceSuggestion) => {
+  const handleAddPlace = async (messageId: string, suggestion: assistantAPI.PlaceSuggestion) => {
+    const token = getStoredToken();
+    if (!token) {
+      console.error('Not authenticated');
+      return;
+    }
+
+    setAddingPlaceId(messageId);
+    
     try {
-      await createPlace({
-        name: suggestion.name,
-        latitude: suggestion.latitude,
-        longitude: suggestion.longitude,
-        address: `${suggestion.city}, ${suggestion.country}`,
-        notes: t('assistant.addedFromAssistant'),
+      // Create place directly on server via API
+      await fetch('/api/places', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: suggestion.name,
+          latitude: suggestion.latitude,
+          longitude: suggestion.longitude,
+          address: `${suggestion.city}, ${suggestion.country}`,
+          notes: t('assistant.addedFromAssistant'),
+        }),
       });
+
+      // Mark this message's place as added
+      setMessages(prev => prev.map(m => 
+        m.id === messageId ? { ...m, placeAdded: true } : m
+      ));
+
+      // Refresh places list to sync with server
+      await refreshPlaces();
 
       // Add confirmation message
       setMessages(prev => [...prev, {
@@ -137,6 +174,16 @@ export function AssistantPage() {
       }]);
     } catch (error) {
       console.error('Failed to add place:', error);
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: i18n.language === 'fr'
+          ? `❌ Erreur lors de l'ajout de **${suggestion.name}**. Veuillez réessayer.`
+          : `❌ Error adding **${suggestion.name}**. Please try again.`,
+      }]);
+    } finally {
+      setAddingPlaceId(null);
+      inputRef.current?.focus();
     }
   };
 
@@ -213,14 +260,31 @@ export function AssistantPage() {
                       <p className="text-xs text-muted-foreground mb-3">
                         {message.placeSuggestion.city}, {message.placeSuggestion.country}
                       </p>
-                      <Button
-                        size="sm"
-                        onClick={() => handleAddPlace(message.placeSuggestion!)}
-                        className="w-full rounded-lg gap-2"
-                      >
-                        <Plus className="h-4 w-4" />
-                        {t('assistant.addToMap')}
-                      </Button>
+                      {message.placeAdded ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled
+                          className="w-full rounded-lg gap-2 text-green-600 border-green-600/30"
+                        >
+                          <Check className="h-4 w-4" />
+                          {t('assistant.addedToMap')}
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={() => handleAddPlace(message.id, message.placeSuggestion!)}
+                          disabled={addingPlaceId === message.id}
+                          className="w-full rounded-lg gap-2"
+                        >
+                          {addingPlaceId === message.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Plus className="h-4 w-4" />
+                          )}
+                          {t('assistant.addToMap')}
+                        </Button>
+                      )}
                     </div>
                   )}
                 </>

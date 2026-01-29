@@ -1,7 +1,7 @@
 {
-  "name": "Wanna Go",
+  "name": "WannaGo - Planificateur de Voyages",
   "short_name": "WannaGo",
-  "description": "Enregistrez les lieux que vous voulez visiter avec GPS, notes et photos",
+  "description": "Enregistrez et partagez les lieux que vous voulez visiter. Planifiez vos voyages avec l'assistant IA.",
   "start_url": "/",
   "id": "/",
   "display": "standalone",
@@ -39,36 +39,28 @@
       "short_name": "Ajouter",
       "description": "Ajouter un nouveau lieu à visiter",
       "url": "/add",
-      "icons": [
-        {
-          "src": "/icons/icon-192x192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Voir la carte",
       "short_name": "Carte",
       "description": "Voir tous les lieux sur la carte",
       "url": "/map",
-      "icons": [
-        {
-          "src": "/icons/icon-192x192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Assistant IA",
+      "short_name": "IA",
+      "description": "Planifier un voyage avec l'assistant",
+      "url": "/assistant",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Mes amis",
       "short_name": "Amis",
-      "description": "Gérer mes amis",
+      "description": "Gérer mes amis et voir leurs lieux",
       "url": "/friends",
-      "icons": [
-        {
-          "src": "/icons/icon-192x192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     }
   ],
   "related_applications": [],
@@ -76,5 +68,17 @@
   "handle_links": "preferred",
   "launch_handler": {
     "client_mode": "navigate-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "share_target": {
+    "action": "/add",
+    "method": "GET",
+    "params": {
+      "title": "name",
+      "text": "notes",
+      "url": "url"
+    }
   }
 }

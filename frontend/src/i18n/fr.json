@@ -158,6 +158,7 @@
     "placeholder": "Décrivez votre voyage idéal...",
     "thinking": "Réflexion en cours...",
     "addToMap": "Ajouter à ma carte",
+    "addedToMap": "Ajouté à la carte",
     "addedFromAssistant": "Ajouté via l'assistant voyage",
     "poweredBy": "Propulsé par IA"
   }

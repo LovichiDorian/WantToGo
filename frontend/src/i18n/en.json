@@ -158,6 +158,7 @@
     "placeholder": "Describe your ideal trip...",
     "thinking": "Thinking...",
     "addToMap": "Add to my map",
+    "addedToMap": "Added to map",
     "addedFromAssistant": "Added via travel assistant",
     "poweredBy": "Powered by AI"
   }
