@@ -6,6 +6,7 @@ import { PlaceFormPage } from '@/pages/PlaceFormPage';
 import { MapPage } from '@/pages/MapPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { FriendsPage } from '@/pages/FriendsPage';
+import { AssistantPage } from '@/pages/AssistantPage';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import { Toaster } from '@/components/ui/toaster';
@@ -66,6 +67,7 @@ function AppRoutes() {
         <Route path="add" element={<PlaceFormPage />} />
         <Route path="edit/:id" element={<PlaceFormPage />} />
         <Route path="friends" element={<FriendsPage />} />
+        <Route path="assistant" element={<AssistantPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
     </Routes>

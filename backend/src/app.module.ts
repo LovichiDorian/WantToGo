@@ -10,6 +10,7 @@ import { SyncModule } from './modules/sync/sync.module';
 import { PhotosModule } from './modules/photos/photos.module';
 import { FriendsModule } from './modules/friends/friends.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AssistantModule } from './modules/assistant/assistant.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthModule } from './modules/auth/auth.module';
     SyncModule,
     PhotosModule,
     FriendsModule,
+    AssistantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,6 +16,7 @@
     "map": "Map",
     "add": "Add",
     "friends": "Friends",
+    "assistant": "AI",
     "settings": "Settings"
   },
   "places": {
@@ -150,5 +151,14 @@
     "registerError": "Registration failed",
     "passwordMismatch": "Passwords don't match",
     "passwordTooShort": "Password must be at least 6 characters"
+  },
+  "assistant": {
+    "title": "Travel Assistant",
+    "subtitle": "Find your next destination",
+    "placeholder": "Describe your ideal trip...",
+    "thinking": "Thinking...",
+    "addToMap": "Add to my map",
+    "addedFromAssistant": "Added via travel assistant",
+    "poweredBy": "Powered by AI"
   }
 }

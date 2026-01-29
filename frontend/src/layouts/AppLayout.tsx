@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Map, List, Plus, Settings, MapPin, Users } from 'lucide-react';
+import { Map, List, Plus, Settings, MapPin, Users, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { OfflineBanner } from '@/features/offline/components/OfflineBanner';
 import { UpdatePrompt } from '@/features/pwa/components/UpdatePrompt';
@@ -101,8 +101,8 @@ export function AppLayout() {
               <Plus className="h-5 w-5" />
             </NavLink>
 
-            {/* Right side: Friends and Settings */}
-            <div className="flex items-center gap-5">
+            {/* Right side: Friends, AI, Settings */}
+            <div className="flex items-center gap-3">
               <NavLink
                 to="/friends"
                 className={({ isActive }) =>
@@ -116,6 +116,20 @@ export function AppLayout() {
               >
                 <Users className="h-4 w-4" />
                 <span className="text-[9px] font-medium">{t('nav.friends')}</span>
+              </NavLink>
+              <NavLink
+                to="/assistant"
+                className={({ isActive }) =>
+                  cn(
+                    'flex flex-col items-center justify-center gap-0.5 py-1 rounded-lg transition-all duration-200',
+                    isActive
+                      ? 'text-violet-500'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )
+                }
+              >
+                <Sparkles className="h-4 w-4" />
+                <span className="text-[9px] font-medium">{t('nav.assistant')}</span>
               </NavLink>
               <NavLink
                 to="/settings"

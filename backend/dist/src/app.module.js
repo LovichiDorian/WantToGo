@@ -19,6 +19,7 @@ const sync_module_1 = require("./modules/sync/sync.module");
 const photos_module_1 = require("./modules/photos/photos.module");
 const friends_module_1 = require("./modules/friends/friends.module");
 const auth_module_1 = require("./modules/auth/auth.module");
+const assistant_module_1 = require("./modules/assistant/assistant.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -38,6 +39,7 @@ exports.AppModule = AppModule = __decorate([
             sync_module_1.SyncModule,
             photos_module_1.PhotosModule,
             friends_module_1.FriendsModule,
+            assistant_module_1.AssistantModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
