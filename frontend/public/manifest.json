@@ -1,13 +1,17 @@
 {
   "name": "Wanna Go",
-  "short_name": "Wanna Go",
-  "description": "Save places you want to visit with GPS, notes, and photos",
+  "short_name": "WannaGo",
+  "description": "Enregistrez les lieux que vous voulez visiter avec GPS, notes et photos",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#0a0a0a",
   "theme_color": "#3b82f6",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "scope": "/",
+  "lang": "fr",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -28,13 +32,12 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["travel", "navigation", "lifestyle"],
-  "screenshots": [],
+  "categories": ["travel", "navigation", "lifestyle", "social"],
   "shortcuts": [
     {
-      "name": "Add Place",
-      "short_name": "Add",
-      "description": "Add a new place to visit",
+      "name": "Ajouter un lieu",
+      "short_name": "Ajouter",
+      "description": "Ajouter un nouveau lieu à visiter",
       "url": "/add",
       "icons": [
         {
@@ -44,10 +47,22 @@
       ]
     },
     {
-      "name": "View Map",
-      "short_name": "Map",
-      "description": "View all places on the map",
+      "name": "Voir la carte",
+      "short_name": "Carte",
+      "description": "Voir tous les lieux sur la carte",
       "url": "/map",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Mes amis",
+      "short_name": "Amis",
+      "description": "Gérer mes amis",
+      "url": "/friends",
       "icons": [
         {
           "src": "/icons/icon-192x192.png",
@@ -57,5 +72,9 @@
     }
   ],
   "related_applications": [],
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }

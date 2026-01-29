@@ -129,6 +129,7 @@
     "showOnMap": "Afficher les amis",
     "hideOnMap": "Masquer les amis",
     "friendAdded": "{{name}} ajouté avec {{count}} lieu(x)",
+    "friendAddedDescription": "Ses lieux apparaissent maintenant sur votre carte",
     "codeNotFound": "Code invalide ou ami introuvable",
     "refresh": "Actualiser"
   },

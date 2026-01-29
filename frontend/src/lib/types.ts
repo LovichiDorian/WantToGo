@@ -7,7 +7,8 @@ export interface Friend {
   name: string;
   color: string;
   places: FriendPlace[];
-  addedAt: string;
+  shareCode?: string; // The friend's share code
+  addedAt: string | Date;
 }
 
 export interface FriendPlace {

@@ -1,10 +1,129 @@
 import { useTranslation } from 'react-i18next';
-import { Users, UserPlus, Trash2, Loader2, MapPin, RefreshCw, Copy, Check, Share2 } from 'lucide-react';
+import { Users, UserPlus, Trash2, Loader2, MapPin, RefreshCw, Copy, Check, Share2, X, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useFriends } from '@/features/friends/hooks/useFriends';
 import { useAuth } from '@/features/auth/AuthContext';
 import { useState } from 'react';
+import type { Friend } from '@/lib/types';
+
+// Success Toast Component
+function SuccessToast({ 
+  friend, 
+  onClose 
+}: { 
+  friend: Friend; 
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center p-4 pointer-events-none">
+      <div 
+        className="pointer-events-auto w-full max-w-sm animate-in slide-in-from-bottom-4 duration-300 bg-card rounded-2xl border border-border/50 shadow-xl p-4"
+        style={{ borderLeftColor: friend.color, borderLeftWidth: '4px' }}
+      >
+        <div className="flex items-start gap-3">
+          <div 
+            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: `linear-gradient(135deg, ${friend.color}30, ${friend.color}15)` }}
+          >
+            <CheckCircle2 className="h-5 w-5 text-green-500" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-foreground">
+              {t('friends.friendAdded', { name: friend.name, count: friend.places.length })}
+            </p>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {t('friends.friendAddedDescription')}
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-8 w-8 rounded-lg flex-shrink-0"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Delete Confirmation Modal
+function DeleteConfirmModal({
+  friend,
+  onConfirm,
+  onCancel,
+  isDeleting
+}: {
+  friend: Friend;
+  onConfirm: () => void;
+  onCancel: () => void;
+  isDeleting: boolean;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onCancel}
+      />
+      
+      {/* Modal */}
+      <div className="relative w-full max-w-sm animate-in zoom-in-95 duration-200 bg-card rounded-2xl border border-border/50 shadow-xl overflow-hidden">
+        <div className="p-5">
+          <div className="flex items-center gap-3 mb-4">
+            <div 
+              className="w-12 h-12 rounded-full flex items-center justify-center"
+              style={{ background: `linear-gradient(135deg, ${friend.color}30, ${friend.color}15)` }}
+            >
+              <MapPin className="h-6 w-6" style={{ color: friend.color }} />
+            </div>
+            <div>
+              <p className="font-semibold text-lg">{friend.name}</p>
+              <p className="text-sm text-muted-foreground">
+                {friend.places.length} {t('friends.places')}
+              </p>
+            </div>
+          </div>
+          
+          <p className="text-muted-foreground mb-6">
+            {t('friends.deleteConfirmDescription', { name: friend.name })}
+          </p>
+          
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={onCancel}
+              disabled={isDeleting}
+              className="flex-1 rounded-xl"
+            >
+              {t('common.cancel')}
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={onConfirm}
+              disabled={isDeleting}
+              className="flex-1 rounded-xl gap-2"
+            >
+              {isDeleting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Trash2 className="h-4 w-4" />
+              )}
+              {t('friends.deleteFriend')}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function FriendsPage() {
   const { t } = useTranslation();
@@ -16,6 +135,13 @@ export function FriendsPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Toast state
+  const [addedFriend, setAddedFriend] = useState<Friend | null>(null);
+  
+  // Delete modal state
+  const [friendToDelete, setFriendToDelete] = useState<Friend | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleCopyCode = async () => {
     if (!user?.shareCode) return;
@@ -67,7 +193,10 @@ export function FriendsPage() {
       const friend = await addFriendByCode(friendCode.trim());
       setFriendCode('');
       setIsAdding(false);
-      alert(t('friends.friendAdded', { name: friend.name, count: friend.places.length }));
+      
+      // Show success toast
+      setAddedFriend(friend);
+      setTimeout(() => setAddedFriend(null), 5000);
     } catch (err) {
       console.error('Add friend failed:', err);
       setError(t('friends.codeNotFound'));
@@ -82,9 +211,21 @@ export function FriendsPage() {
     setIsRefreshing(false);
   };
 
-  const handleDeleteFriend = async (id: string, name: string) => {
-    if (confirm(t('friends.deleteConfirmDescription', { name }))) {
-      await deleteFriend(id);
+  const handleDeleteFriend = (friend: Friend) => {
+    setFriendToDelete(friend);
+  };
+
+  const confirmDelete = async () => {
+    if (!friendToDelete) return;
+    
+    setIsDeleting(true);
+    try {
+      await deleteFriend(friendToDelete.id);
+      setFriendToDelete(null);
+    } catch (err) {
+      console.error('Delete friend failed:', err);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -240,7 +381,7 @@ export function FriendsPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleDeleteFriend(friend.id, friend.name)}
+                    onClick={() => handleDeleteFriend(friend)}
                     className="rounded-xl text-red-500 hover:text-red-600 hover:bg-red-500/10"
                   >
                     <Trash2 className="h-5 w-5" />
@@ -251,6 +392,24 @@ export function FriendsPage() {
           </div>
         )}
       </div>
+
+      {/* Success Toast */}
+      {addedFriend && (
+        <SuccessToast 
+          friend={addedFriend} 
+          onClose={() => setAddedFriend(null)} 
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {friendToDelete && (
+        <DeleteConfirmModal
+          friend={friendToDelete}
+          onConfirm={confirmDelete}
+          onCancel={() => setFriendToDelete(null)}
+          isDeleting={isDeleting}
+        />
+      )}
     </div>
   );
 }

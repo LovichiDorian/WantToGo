@@ -83,6 +83,38 @@ export async function deleteFriend(id: string): Promise<void> {
 }
 
 /**
+ * Save a friend directly (used for sync)
+ */
+export async function saveFriend(friend: Friend): Promise<void> {
+  const db = await getDB();
+  await db.put('friends', friend);
+}
+
+/**
+ * Sync friends from server - replace all local friends
+ */
+export async function syncFriends(serverFriends: Friend[]): Promise<void> {
+  const db = await getDB();
+  
+  // Get all existing friends
+  const existingFriends = await db.getAll('friends');
+  const existingIds = new Set(existingFriends.map(f => f.id));
+  const serverIds = new Set(serverFriends.map(f => f.id));
+  
+  // Delete friends that are no longer on server
+  for (const existingId of existingIds) {
+    if (!serverIds.has(existingId)) {
+      await db.delete('friends', existingId);
+    }
+  }
+  
+  // Add or update friends from server
+  for (const friend of serverFriends) {
+    await db.put('friends', friend);
+  }
+}
+
+/**
  * Get next available color for a new friend
  */
 export async function getNextFriendColor(): Promise<string> {

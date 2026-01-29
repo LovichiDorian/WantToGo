@@ -1,14 +1,6 @@
 import { apiRequest } from './client';
 import type { FriendPlace } from '../types';
-
-const getDeviceId = (): string => {
-  let deviceId = localStorage.getItem('wanttogo-device-id');
-  if (!deviceId) {
-    deviceId = crypto.randomUUID();
-    localStorage.setItem('wanttogo-device-id', deviceId);
-  }
-  return deviceId;
-};
+import { getStoredToken } from './auth';
 
 export interface MyCodeResponse {
   shareCode: string;
@@ -21,33 +13,70 @@ export interface FriendResponse {
   places: FriendPlace[];
 }
 
+export interface FriendshipResponse {
+  id: string;
+  friendCode: string;
+  friendName: string;
+  color: string;
+  places: FriendPlace[];
+  createdAt: string;
+}
+
 /**
- * Get my share code (creates user if needed)
+ * Get auth headers for authenticated requests
+ */
+function getAuthHeaders(): Record<string, string> {
+  const token = getStoredToken();
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+  return {
+    'Authorization': `Bearer ${token}`,
+  };
+}
+
+/**
+ * Get my share code (authenticated)
  */
 export async function getMyShareCode(): Promise<MyCodeResponse> {
   return apiRequest<MyCodeResponse>('/friends/my-code', {
-    headers: {
-      'x-device-id': getDeviceId(),
-    },
+    headers: getAuthHeaders(),
   });
 }
 
 /**
- * Get friend's places by their share code
+ * Get all my friends (authenticated)
+ */
+export async function getFriends(): Promise<FriendshipResponse[]> {
+  return apiRequest<FriendshipResponse[]>('/friends', {
+    headers: getAuthHeaders(),
+  });
+}
+
+/**
+ * Add a friend by their share code (authenticated)
+ */
+export async function addFriend(shareCode: string): Promise<FriendshipResponse> {
+  return apiRequest<FriendshipResponse>('/friends', {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ shareCode }),
+  });
+}
+
+/**
+ * Delete a friend (authenticated)
+ */
+export async function deleteFriend(friendshipId: string): Promise<void> {
+  await apiRequest(`/friends/${friendshipId}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+}
+
+/**
+ * Get friend's places by their share code (public endpoint for preview)
  */
 export async function getFriendPlaces(shareCode: string): Promise<FriendResponse> {
   return apiRequest<FriendResponse>(`/friends/places/${shareCode}`);
-}
-
-/**
- * Update my display name
- */
-export async function updateMyName(name: string): Promise<void> {
-  await apiRequest('/friends/my-name', {
-    method: 'PATCH',
-    headers: {
-      'x-device-id': getDeviceId(),
-    },
-    body: JSON.stringify({ name }),
-  });
 }

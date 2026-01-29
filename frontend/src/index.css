@@ -101,12 +101,49 @@
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
+  
+  html {
+    /* Prevent iOS text size adjust after orientation change */
+    -webkit-text-size-adjust: 100%;
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
+  }
+  
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: contain;
+    /* Prevent text selection on touch */
+    -webkit-touch-callout: none;
+    /* Safe area padding */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
+  
   html, body, #root {
     @apply h-full;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+  /* Inputs should have 16px font to prevent iOS zoom */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Touch-friendly tap targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Small buttons exception */
+  button.btn-sm, .h-8, .h-9, .h-10 {
+    min-height: auto;
+    min-width: auto;
   }
 }
 

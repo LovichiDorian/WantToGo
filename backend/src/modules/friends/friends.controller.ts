@@ -1,54 +1,75 @@
 import {
   Controller,
   Get,
+  Post,
+  Delete,
   Param,
-  Headers,
-  BadRequestException,
-  Patch,
   Body,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { FriendsService } from './friends.service';
-import { FriendDto, MyCodeDto } from './friends.dto';
+import { FriendDto, MyCodeDto, AddFriendDto, FriendshipDto } from './friends.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+
+interface RequestWithUser {
+  user: { id: string; email: string };
+}
 
 @Controller('friends')
 export class FriendsController {
   constructor(private readonly friendsService: FriendsService) {}
 
   /**
-   * Get my share code (creates user if doesn't exist)
+   * Get my share code (authenticated)
    */
+  @UseGuards(JwtAuthGuard)
   @Get('my-code')
-  async getMyCode(
-    @Headers('x-device-id') deviceId: string,
-  ): Promise<MyCodeDto> {
-    if (!deviceId) {
-      throw new BadRequestException('Device ID header is required');
-    }
-    return this.friendsService.getMyCode(deviceId);
+  async getMyCode(@Request() req: RequestWithUser): Promise<MyCodeDto> {
+    return this.friendsService.getMyCode(req.user.id);
   }
 
   /**
-   * Get friend's places by their share code
+   * Get all my friends (authenticated)
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async getFriends(@Request() req: RequestWithUser): Promise<FriendshipDto[]> {
+    return this.friendsService.getFriends(req.user.id);
+  }
+
+  /**
+   * Add a friend by their share code (authenticated)
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  async addFriend(
+    @Request() req: RequestWithUser,
+    @Body() addFriendDto: AddFriendDto,
+  ): Promise<FriendshipDto> {
+    return this.friendsService.addFriend(req.user.id, addFriendDto.shareCode);
+  }
+
+  /**
+   * Delete a friend (authenticated)
+   */
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async deleteFriend(
+    @Request() req: RequestWithUser,
+    @Param('id') friendshipId: string,
+  ): Promise<{ success: boolean }> {
+    await this.friendsService.deleteFriend(req.user.id, friendshipId);
+    return { success: true };
+  }
+
+  /**
+   * Get friend's places by their share code (public endpoint for preview)
    */
   @Get('places/:shareCode')
   async getFriendPlaces(
     @Param('shareCode') shareCode: string,
   ): Promise<FriendDto> {
     return this.friendsService.getFriendPlaces(shareCode);
-  }
-
-  /**
-   * Update my display name
-   */
-  @Patch('my-name')
-  async updateMyName(
-    @Headers('x-device-id') deviceId: string,
-    @Body('name') name: string,
-  ): Promise<{ success: boolean }> {
-    if (!deviceId) {
-      throw new BadRequestException('Device ID header is required');
-    }
-    await this.friendsService.updateMyName(deviceId, name);
-    return { success: true };
   }
 }

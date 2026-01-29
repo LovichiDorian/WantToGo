@@ -129,6 +129,7 @@
     "showOnMap": "Show friends",
     "hideOnMap": "Hide friends",
     "friendAdded": "{{name}} added with {{count}} place(s)",
+    "friendAddedDescription": "Their places now appear on your map",
     "codeNotFound": "Invalid code or friend not found",
     "refresh": "Refresh"
   },

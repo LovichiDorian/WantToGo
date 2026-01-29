@@ -15,6 +15,14 @@ export declare class FriendDto {
     name: string;
     places: FriendPlaceDto[];
 }
+export declare class FriendshipDto {
+    id: string;
+    friendCode: string;
+    friendName: string;
+    color: string;
+    places: FriendPlaceDto[];
+    createdAt: string;
+}
 export declare class MyCodeDto {
     shareCode: string;
     placesCount: number;

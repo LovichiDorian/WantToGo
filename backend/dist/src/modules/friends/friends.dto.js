@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyCodeDto = exports.FriendDto = exports.FriendPlaceDto = exports.AddFriendDto = void 0;
+exports.MyCodeDto = exports.FriendshipDto = exports.FriendDto = exports.FriendPlaceDto = exports.AddFriendDto = void 0;
 const class_validator_1 = require("class-validator");
 class AddFriendDto {
     shareCode;
@@ -18,7 +18,7 @@ exports.AddFriendDto = AddFriendDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Length)(36, 36),
+    (0, class_validator_1.MinLength)(1),
     __metadata("design:type", String)
 ], AddFriendDto.prototype, "shareCode", void 0);
 class FriendPlaceDto {
@@ -37,6 +37,15 @@ class FriendDto {
     places;
 }
 exports.FriendDto = FriendDto;
+class FriendshipDto {
+    id;
+    friendCode;
+    friendName;
+    color;
+    places;
+    createdAt;
+}
+exports.FriendshipDto = FriendshipDto;
 class MyCodeDto {
     shareCode;
     placesCount;

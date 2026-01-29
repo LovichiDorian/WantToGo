@@ -15,36 +15,65 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FriendsController = void 0;
 const common_1 = require("@nestjs/common");
 const friends_service_1 = require("./friends.service");
+const friends_dto_1 = require("./friends.dto");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let FriendsController = class FriendsController {
     friendsService;
     constructor(friendsService) {
         this.friendsService = friendsService;
     }
-    async getMyCode(deviceId) {
-        if (!deviceId) {
-            throw new common_1.BadRequestException('Device ID header is required');
-        }
-        return this.friendsService.getMyCode(deviceId);
+    async getMyCode(req) {
+        return this.friendsService.getMyCode(req.user.id);
+    }
+    async getFriends(req) {
+        return this.friendsService.getFriends(req.user.id);
+    }
+    async addFriend(req, addFriendDto) {
+        return this.friendsService.addFriend(req.user.id, addFriendDto.shareCode);
+    }
+    async deleteFriend(req, friendshipId) {
+        await this.friendsService.deleteFriend(req.user.id, friendshipId);
+        return { success: true };
     }
     async getFriendPlaces(shareCode) {
         return this.friendsService.getFriendPlaces(shareCode);
     }
-    async updateMyName(deviceId, name) {
-        if (!deviceId) {
-            throw new common_1.BadRequestException('Device ID header is required');
-        }
-        await this.friendsService.updateMyName(deviceId, name);
-        return { success: true };
-    }
 };
 exports.FriendsController = FriendsController;
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)('my-code'),
-    __param(0, (0, common_1.Headers)('x-device-id')),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FriendsController.prototype, "getMyCode", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FriendsController.prototype, "getFriends", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, friends_dto_1.AddFriendDto]),
+    __metadata("design:returntype", Promise)
+], FriendsController.prototype, "addFriend", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], FriendsController.prototype, "deleteFriend", null);
 __decorate([
     (0, common_1.Get)('places/:shareCode'),
     __param(0, (0, common_1.Param)('shareCode')),
@@ -52,14 +81,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], FriendsController.prototype, "getFriendPlaces", null);
-__decorate([
-    (0, common_1.Patch)('my-name'),
-    __param(0, (0, common_1.Headers)('x-device-id')),
-    __param(1, (0, common_1.Body)('name')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", Promise)
-], FriendsController.prototype, "updateMyName", null);
 exports.FriendsController = FriendsController = __decorate([
     (0, common_1.Controller)('friends'),
     __metadata("design:paramtypes", [friends_service_1.FriendsService])
