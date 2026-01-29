@@ -18,7 +18,20 @@ module.exports = {
         PORT: 3010,
       },
     },
-    // Frontend is served by nginx from dist/ folder
-    // No need for a dev server in production
+    {
+      name: 'wanttogo-frontend',
+      cwd: './frontend',
+      script: '/home/ubuntu/.npm-global/bin/serve',
+      args: ['-s', 'dist', '-p', '3000'],
+      interpreter: 'none',
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '200M',
+      env: {
+        NODE_ENV: 'production',
+      },
+    },
   ],
 };
