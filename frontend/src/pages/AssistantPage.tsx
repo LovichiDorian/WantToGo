@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   Send, 
@@ -16,6 +16,30 @@ import { Input } from '@/components/ui/input';
 import * as assistantAPI from '@/lib/api/assistant';
 import { getStoredToken } from '@/lib/api/auth';
 import { usePlaces } from '@/features/places/hooks/usePlaces';
+
+// Simple markdown renderer for chat messages
+function renderMarkdown(text: string): string {
+  return text
+    // Bold: **text** or __text__
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.+?)__/g, '<strong>$1</strong>')
+    // Italic: *text* or _text_
+    .replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>')
+    .replace(/(?<!_)_(?!_)(.+?)(?<!_)_(?!_)/g, '<em>$1</em>')
+    // Line breaks
+    .replace(/\n/g, '<br/>');
+}
+
+// Component to render markdown content
+function MarkdownContent({ content, className }: { content: string; className?: string }) {
+  const html = useMemo(() => renderMarkdown(content), [content]);
+  return (
+    <p 
+      className={className}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
 
 interface Message {
   id: string;
@@ -246,7 +270,7 @@ export function AssistantPage() {
                 </div>
               ) : (
                 <>
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  <MarkdownContent content={message.content} className="text-sm" />
                   
                   {/* Place suggestion card */}
                   {message.placeSuggestion && (

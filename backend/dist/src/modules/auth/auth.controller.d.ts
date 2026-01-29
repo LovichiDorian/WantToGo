@@ -10,9 +10,9 @@ export declare class AuthController {
             id: string;
         };
     }): Promise<{
-        id: string;
-        email: string;
         shareCode: string;
+        email: string;
+        id: string;
         name: string | null;
     } | null>;
 }

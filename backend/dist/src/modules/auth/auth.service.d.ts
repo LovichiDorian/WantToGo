@@ -8,9 +8,9 @@ export declare class AuthService {
     register(dto: RegisterDto): Promise<AuthResponseDto>;
     login(dto: LoginDto): Promise<AuthResponseDto>;
     validateUser(userId: string): Promise<{
-        id: string;
-        email: string;
         shareCode: string;
+        email: string;
+        id: string;
         name: string | null;
     } | null>;
     private generateToken;
