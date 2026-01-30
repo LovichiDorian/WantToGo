@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import fallbackCityImg from '@/assets/fallback-city.jpg';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -49,6 +50,13 @@ export function PlaceDetailPage() {
     // If place has user photos, use the first one directly
     if (place.photos && place.photos.length > 0 && place.photos[0].filename) {
       setHeroImageUrl(place.photos[0].filename);
+      return;
+    }
+
+    // If place is not synced yet (pending), use local fallback directly
+    // to avoid API call that would fail
+    if (place.syncStatus === 'pending') {
+      setHeroImageUrl(getPlaceHeroUrl(place.name));
       return;
     }
 
@@ -129,11 +137,17 @@ export function PlaceDetailPage() {
       {/* Hero Image Section */}
       <div className="relative h-56 overflow-hidden">
         {/* Background Image */}
-        <img 
+        <img
           src={displayImageUrl}
           alt={place.name}
           className={`w-full h-full object-cover transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImageLoaded(true)}
+          onError={e => {
+            // Fallback to local image if Unsplash/remote fails
+            if ((e.target as HTMLImageElement).src.indexOf('fallback-city.jpg') === -1) {
+              (e.target as HTMLImageElement).src = fallbackCityImg;
+            }
+          }}
         />
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary/10 animate-pulse" />
