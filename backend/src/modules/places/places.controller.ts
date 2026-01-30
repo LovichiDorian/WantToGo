@@ -8,40 +8,49 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { PlacesService } from './places.service';
 import { CreatePlaceDto, UpdatePlaceDto } from './places.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-// TODO: Replace with actual user ID from auth middleware
-const TEMP_USER_ID = 'default-user-id';
+interface RequestWithUser extends Request {
+  user: { id: string; email: string };
+}
 
 @Controller('places')
+@UseGuards(JwtAuthGuard)
 export class PlacesController {
   constructor(private readonly placesService: PlacesService) {}
 
   @Get()
-  async findAll() {
-    return this.placesService.findAll(TEMP_USER_ID);
+  async findAll(@Request() req: RequestWithUser) {
+    return this.placesService.findAll(req.user.id);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.placesService.findOne(id, TEMP_USER_ID);
+  async findOne(@Param('id') id: string, @Request() req: RequestWithUser) {
+    return this.placesService.findOne(id, req.user.id);
   }
 
   @Post()
-  async create(@Body() dto: CreatePlaceDto) {
-    return this.placesService.create(TEMP_USER_ID, dto);
+  async create(@Body() dto: CreatePlaceDto, @Request() req: RequestWithUser) {
+    return this.placesService.create(req.user.id, dto);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() dto: UpdatePlaceDto) {
-    return this.placesService.update(id, TEMP_USER_ID, dto);
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdatePlaceDto,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.placesService.update(id, req.user.id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string) {
-    await this.placesService.remove(id, TEMP_USER_ID);
+  async remove(@Param('id') id: string, @Request() req: RequestWithUser) {
+    await this.placesService.remove(id, req.user.id);
   }
 }

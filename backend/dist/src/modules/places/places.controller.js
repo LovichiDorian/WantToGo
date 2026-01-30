@@ -16,67 +16,73 @@ exports.PlacesController = void 0;
 const common_1 = require("@nestjs/common");
 const places_service_1 = require("./places.service");
 const places_dto_1 = require("./places.dto");
-const TEMP_USER_ID = 'default-user-id';
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let PlacesController = class PlacesController {
     placesService;
     constructor(placesService) {
         this.placesService = placesService;
     }
-    async findAll() {
-        return this.placesService.findAll(TEMP_USER_ID);
+    async findAll(req) {
+        return this.placesService.findAll(req.user.id);
     }
-    async findOne(id) {
-        return this.placesService.findOne(id, TEMP_USER_ID);
+    async findOne(id, req) {
+        return this.placesService.findOne(id, req.user.id);
     }
-    async create(dto) {
-        return this.placesService.create(TEMP_USER_ID, dto);
+    async create(dto, req) {
+        return this.placesService.create(req.user.id, dto);
     }
-    async update(id, dto) {
-        return this.placesService.update(id, TEMP_USER_ID, dto);
+    async update(id, dto, req) {
+        return this.placesService.update(id, req.user.id, dto);
     }
-    async remove(id) {
-        await this.placesService.remove(id, TEMP_USER_ID);
+    async remove(id, req) {
+        await this.placesService.remove(id, req.user.id);
     }
 };
 exports.PlacesController = PlacesController;
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], PlacesController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], PlacesController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [places_dto_1.CreatePlaceDto]),
+    __metadata("design:paramtypes", [places_dto_1.CreatePlaceDto, Object]),
     __metadata("design:returntype", Promise)
 ], PlacesController.prototype, "create", null);
 __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, places_dto_1.UpdatePlaceDto]),
+    __metadata("design:paramtypes", [String, places_dto_1.UpdatePlaceDto, Object]),
     __metadata("design:returntype", Promise)
 ], PlacesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], PlacesController.prototype, "remove", null);
 exports.PlacesController = PlacesController = __decorate([
     (0, common_1.Controller)('places'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:paramtypes", [places_service_1.PlacesService])
 ], PlacesController);
 //# sourceMappingURL=places.controller.js.map

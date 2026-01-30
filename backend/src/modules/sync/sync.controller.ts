@@ -1,11 +1,22 @@
-import { Controller, Post, Get, Body, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Query,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { SyncService } from './sync.service';
 import { BulkSyncRequestDto, BulkSyncResponse } from './sync.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-// TODO: Replace with actual user ID from auth middleware
-const TEMP_USER_ID = 'default-user-id';
+interface RequestWithUser extends Request {
+  user: { id: string; email: string };
+}
 
 @Controller('sync')
+@UseGuards(JwtAuthGuard)
 export class SyncController {
   constructor(private readonly syncService: SyncService) {}
 
@@ -14,8 +25,11 @@ export class SyncController {
    * This endpoint is called by the Background Sync API or manual sync
    */
   @Post('bulk')
-  async bulkSync(@Body() dto: BulkSyncRequestDto): Promise<BulkSyncResponse> {
-    return this.syncService.processBulkSync(TEMP_USER_ID, dto);
+  async bulkSync(
+    @Body() dto: BulkSyncRequestDto,
+    @Request() req: RequestWithUser,
+  ): Promise<BulkSyncResponse> {
+    return this.syncService.processBulkSync(req.user.id, dto);
   }
 
   /**
@@ -23,8 +37,11 @@ export class SyncController {
    * Used for delta sync after initial load
    */
   @Get('changes')
-  async getChanges(@Query('since') since?: string) {
+  async getChanges(
+    @Query('since') since: string | undefined,
+    @Request() req: RequestWithUser,
+  ) {
     const sinceDate = since ? new Date(since) : new Date(0);
-    return this.syncService.getChangesSince(TEMP_USER_ID, sinceDate);
+    return this.syncService.getChangesSince(req.user.id, sinceDate);
   }
 }

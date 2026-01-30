@@ -11,7 +11,8 @@ import {
   Calendar,
   FileText,
   MapIcon,
-  CheckCircle2
+  CheckCircle2,
+  Search
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +22,7 @@ import { usePlaces } from '@/features/places/hooks/usePlaces';
 import { useGeolocation } from '@/features/map/hooks/useGeolocation';
 import { LocationPicker } from '@/features/map/components/LocationPicker';
 import { PhotoCapture } from '@/features/photos/components/PhotoCapture';
+import { PlaceAutocomplete } from '@/components/PlaceAutocomplete';
 import { cn } from '@/lib/utils';
 
 interface PlaceFormData {
@@ -219,21 +221,28 @@ export function PlaceFormPage() {
 
       {/* Form */}
       <div className="space-y-5">
-        {/* Name Field */}
+        {/* Name Field with Autocomplete */}
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-sm font-medium">
+          <Label htmlFor="name" className="text-sm font-medium flex items-center gap-2">
+            <Search className="h-4 w-4 text-muted-foreground" />
             {t('places.name')} <span className="text-destructive">*</span>
           </Label>
-          <Input
-            id="name"
+          <PlaceAutocomplete
             value={formData.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
+            onChange={(value) => handleInputChange('name', value)}
+            onSelect={(place) => {
+              handleInputChange('name', place.name);
+              handleInputChange('latitude', place.latitude);
+              handleInputChange('longitude', place.longitude);
+              handleInputChange('address', place.fullName);
+              setErrors((prev) => ({ ...prev, location: undefined }));
+            }}
             placeholder={t('places.namePlaceholder')}
-            className={cn(
-              "h-12 rounded-xl bg-muted/50 border-0 focus-visible:ring-2 focus-visible:ring-primary/20",
-              errors.name && "ring-2 ring-destructive/50"
-            )}
+            className={cn(errors.name && "[&_input]:ring-2 [&_input]:ring-destructive/50")}
           />
+          <p className="text-xs text-muted-foreground">
+            Tapez pour rechercher et sélectionner un lieu
+          </p>
           {errors.name && (
             <p className="text-sm text-destructive">{errors.name}</p>
           )}

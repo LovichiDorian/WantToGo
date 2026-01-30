@@ -11,12 +11,13 @@ const common_1 = require("@nestjs/common");
 const sync_controller_1 = require("./sync.controller");
 const sync_service_1 = require("./sync.service");
 const places_module_1 = require("../places/places.module");
+const auth_module_1 = require("../auth/auth.module");
 let SyncModule = class SyncModule {
 };
 exports.SyncModule = SyncModule;
 exports.SyncModule = SyncModule = __decorate([
     (0, common_1.Module)({
-        imports: [places_module_1.PlacesModule],
+        imports: [places_module_1.PlacesModule, auth_module_1.AuthModule],
         controllers: [sync_controller_1.SyncController],
         providers: [sync_service_1.SyncService],
     })

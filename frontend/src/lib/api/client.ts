@@ -1,29 +1,47 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { getStoredToken } from './auth';
+
+// Use relative path for same-origin, or construct from window.location for production
+const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' 
+    ? 'http://localhost:3010/api' 
+    : `${window.location.protocol}//${window.location.hostname}:3010/api`);
 
 interface RequestOptions extends RequestInit {
   timeout?: number;
+  skipAuth?: boolean;
 }
 
 /**
- * API client with timeout and error handling
+ * API client with authentication, timeout and error handling
  */
 export async function apiRequest<T>(
   endpoint: string,
   options: RequestOptions = {}
 ): Promise<T> {
-  const { timeout = 10000, ...fetchOptions } = options;
+  const { timeout = 10000, skipAuth = false, ...fetchOptions } = options;
   
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  // Build headers with authentication
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(fetchOptions.headers as Record<string, string>),
+  };
+
+  // Add auth token if available and not skipped
+  if (!skipAuth) {
+    const token = getStoredToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
 
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...fetchOptions,
       signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        ...fetchOptions.headers,
-      },
+      headers,
     });
 
     clearTimeout(timeoutId);
@@ -75,5 +93,9 @@ export class ApiError extends Error {
 
   get isNetworkError(): boolean {
     return this.statusCode === 0;
+  }
+
+  get isUnauthorized(): boolean {
+    return this.statusCode === 401;
   }
 }

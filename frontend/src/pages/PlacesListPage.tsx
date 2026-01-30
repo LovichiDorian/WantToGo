@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { usePlaces } from '@/features/places/hooks/usePlaces';
 import { SyncStatus } from '@/features/offline/components/SyncStatus';
 import { useSync } from '@/features/offline/hooks/useSync';
+import { TravelStats } from '@/components/TravelStats';
+import { getPlaceThumbnailUrl } from '@/lib/utils/placeImage';
 import { useState, useMemo } from 'react';
 
 interface Place {
@@ -20,8 +22,11 @@ interface Place {
   createdAt: Date | string;
 }
 
-// Modern place card component
+// Modern place card component with background image
 function PlaceListItem({ place, onClick }: { place: Place; onClick: () => void }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  
   const formattedDate = place.tripDate 
     ? new Date(place.tripDate).toLocaleDateString(undefined, { 
         month: 'short', 
@@ -30,56 +35,65 @@ function PlaceListItem({ place, onClick }: { place: Place; onClick: () => void }
       })
     : null;
 
+  // Get image URL from photos or generate from place name
+  const imageUrl = place.photos?.[0]?.filename || getPlaceThumbnailUrl(place.name);
+
   return (
     <button
       onClick={onClick}
-      className="w-full text-left bg-card hover:bg-accent/50 rounded-2xl p-4 border border-border/50 transition-all duration-200 hover:shadow-md hover:border-border group"
+      className="w-full text-left rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-lg hover:scale-[1.02] group relative h-32"
     >
-      <div className="flex items-start gap-4">
-        {/* Icon or photo thumbnail */}
-        <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/10 transition-colors">
-          {place.photos && place.photos.length > 0 && place.photos[0].filename ? (
-            <img 
-              src={place.photos[0].filename} 
-              alt="" 
-              className="w-full h-full object-cover rounded-xl"
-            />
-          ) : (
-            <MapPin className="h-6 w-6 text-primary" />
-          )}
-        </div>
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        {!imageError && (
+          <img 
+            src={imageUrl}
+            alt=""
+            className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
+            loading="lazy"
+          />
+        )}
+        {/* Gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
+        {/* Fallback gradient if image fails */}
+        {(imageError || !imageLoaded) && (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary/10" />
+        )}
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+      {/* Content */}
+      <div className="relative h-full p-4 flex flex-col justify-between">
+        <div>
+          <h3 className="font-bold text-white text-lg truncate drop-shadow-md group-hover:text-primary-foreground transition-colors">
             {place.name}
           </h3>
           
           {place.address && (
-            <p className="text-sm text-muted-foreground truncate mt-0.5">
+            <p className="text-sm text-white/80 truncate mt-0.5 drop-shadow">
+              <MapPin className="h-3 w-3 inline-block mr-1" />
               {place.address}
             </p>
           )}
-          
-          {place.notes && (
-            <p className="text-sm text-muted-foreground/70 line-clamp-1 mt-1">
-              {place.notes}
-            </p>
-          )}
-
-          {formattedDate && (
-            <div className="flex items-center gap-1.5 mt-2">
-              <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">{formattedDate}</span>
-            </div>
-          )}
         </div>
 
-        {/* Arrow indicator */}
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+        <div className="flex items-center justify-between">
+          {formattedDate ? (
+            <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-full px-2.5 py-1">
+              <Calendar className="h-3 w-3 text-white" />
+              <span className="text-xs text-white font-medium">{formattedDate}</span>
+            </div>
+          ) : (
+            <div />
+          )}
+          
+          {/* Arrow indicator */}
+          <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
       </div>
     </button>
@@ -153,6 +167,9 @@ export function PlacesListPage() {
           />
         </div>
       )}
+
+      {/* Travel Statistics */}
+      <TravelStats places={places} />
 
       {/* Sync status */}
       <SyncStatus syncState={syncState} pendingCount={pendingCount} />

@@ -1,10 +1,16 @@
 import { SyncService } from './sync.service';
 import { BulkSyncRequestDto, BulkSyncResponse } from './sync.dto';
+interface RequestWithUser extends Request {
+    user: {
+        id: string;
+        email: string;
+    };
+}
 export declare class SyncController {
     private readonly syncService;
     constructor(syncService: SyncService);
-    bulkSync(dto: BulkSyncRequestDto): Promise<BulkSyncResponse>;
-    getChanges(since?: string): Promise<({
+    bulkSync(dto: BulkSyncRequestDto, req: RequestWithUser): Promise<BulkSyncResponse>;
+    getChanges(since: string | undefined, req: RequestWithUser): Promise<({
         photos: {
             id: string;
             createdAt: Date;
@@ -28,3 +34,4 @@ export declare class SyncController {
         userId: string;
     })[]>;
 }
+export {};

@@ -1,9 +1,15 @@
 import { PlacesService } from './places.service';
 import { CreatePlaceDto, UpdatePlaceDto } from './places.dto';
+interface RequestWithUser extends Request {
+    user: {
+        id: string;
+        email: string;
+    };
+}
 export declare class PlacesController {
     private readonly placesService;
     constructor(placesService: PlacesService);
-    findAll(): Promise<{
+    findAll(req: RequestWithUser): Promise<{
         id: string;
         name: string;
         createdAt: Date;
@@ -17,7 +23,7 @@ export declare class PlacesController {
         deletedAt: Date | null;
         userId: string;
     }[]>;
-    findOne(id: string): Promise<{
+    findOne(id: string, req: RequestWithUser): Promise<{
         id: string;
         name: string;
         createdAt: Date;
@@ -31,7 +37,7 @@ export declare class PlacesController {
         deletedAt: Date | null;
         userId: string;
     }>;
-    create(dto: CreatePlaceDto): Promise<{
+    create(dto: CreatePlaceDto, req: RequestWithUser): Promise<{
         id: string;
         name: string;
         createdAt: Date;
@@ -45,7 +51,7 @@ export declare class PlacesController {
         deletedAt: Date | null;
         userId: string;
     }>;
-    update(id: string, dto: UpdatePlaceDto): Promise<{
+    update(id: string, dto: UpdatePlaceDto, req: RequestWithUser): Promise<{
         id: string;
         name: string;
         createdAt: Date;
@@ -59,5 +65,6 @@ export declare class PlacesController {
         deletedAt: Date | null;
         userId: string;
     }>;
-    remove(id: string): Promise<void>;
+    remove(id: string, req: RequestWithUser): Promise<void>;
 }
+export {};

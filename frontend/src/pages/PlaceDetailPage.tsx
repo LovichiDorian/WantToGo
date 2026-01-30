@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { usePlaces } from '@/features/places/hooks/usePlaces';
+import { getPlaceHeroUrl } from '@/lib/utils/placeImage';
 import { useState, useMemo } from 'react';
 
 /**
@@ -35,6 +36,7 @@ export function PlaceDetailPage() {
   const { places, deletePlace, isLoading } = usePlaces();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const place = useMemo(() => places.find((p) => p.id === id), [places, id]);
 
@@ -91,41 +93,72 @@ export function PlaceDetailPage() {
     : null;
 
   const isPending = place.syncStatus === 'pending';
+  
+  // Get image URL from photos or generate from place name
+  const heroImageUrl = place.photos?.[0]?.filename || getPlaceHeroUrl(place.name);
 
   return (
-    <div className="space-y-6 py-4">
-      {/* Header */}
-      <div className="flex items-start gap-3">
+    <div className="space-y-6 -mx-4 -mt-4">
+      {/* Hero Image Section */}
+      <div className="relative h-56 overflow-hidden">
+        {/* Background Image */}
+        <img 
+          src={heroImageUrl}
+          alt={place.name}
+          className={`w-full h-full object-cover transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={() => setImageLoaded(true)}
+        />
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary/10 animate-pulse" />
+        )}
+        
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        
+        {/* Back button */}
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={() => navigate(-1)}
-          className="flex-shrink-0 rounded-xl"
+          className="absolute top-4 left-4 rounded-xl bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold truncate">{place.name}</h1>
-            {isPending ? (
-              <CloudOff className="h-5 w-5 text-amber-500 flex-shrink-0" />
-            ) : (
-              <Cloud className="h-5 w-5 text-green-500 flex-shrink-0" />
-            )}
-          </div>
+        
+        {/* Sync status badge */}
+        <div className="absolute top-4 right-4">
+          {isPending ? (
+            <div className="flex items-center gap-1.5 bg-amber-500/90 backdrop-blur-sm rounded-full px-3 py-1.5">
+              <CloudOff className="h-4 w-4 text-white" />
+              <span className="text-xs font-medium text-white">Hors ligne</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 bg-green-500/90 backdrop-blur-sm rounded-full px-3 py-1.5">
+              <Cloud className="h-4 w-4 text-white" />
+              <span className="text-xs font-medium text-white">Synchronisé</span>
+            </div>
+          )}
+        </div>
+        
+        {/* Title overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <h1 className="text-2xl font-bold text-white drop-shadow-lg">{place.name}</h1>
           {place.address && (
-            <p className="text-muted-foreground mt-0.5 truncate">{place.address}</p>
+            <p className="text-white/80 mt-1 flex items-center gap-1.5 drop-shadow">
+              <MapPin className="h-4 w-4" />
+              {place.address}
+            </p>
           )}
         </div>
       </div>
 
-      {/* Photos Gallery */}
+      {/* User Photos Gallery (if any) */}
       {place.photos && place.photos.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide px-4">
           {place.photos.map((photo, index) => (
             <div
               key={photo.id}
-              className="w-36 h-36 rounded-2xl bg-muted flex-shrink-0 overflow-hidden shadow-sm"
+              className="w-24 h-24 rounded-xl bg-muted flex-shrink-0 overflow-hidden shadow-sm"
             >
               <img
                 src={photo.filename}
@@ -138,7 +171,7 @@ export function PlaceDetailPage() {
       )}
 
       {/* Info Cards */}
-      <div className="space-y-3">
+      <div className="space-y-3 px-4">
         {/* Location Card */}
         <div className="bg-card rounded-2xl border border-border/50 p-4">
           <div className="flex items-start gap-3">
@@ -199,14 +232,14 @@ export function PlaceDetailPage() {
 
       {/* Pending sync notice */}
       {isPending && (
-        <div className="bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-xl p-3 text-sm text-center">
+        <div className="bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-xl p-3 text-sm text-center mx-4">
           <CloudOff className="h-4 w-4 inline-block mr-2" />
           {t('places.savedOffline')}
         </div>
       )}
 
       {/* Action Buttons */}
-      <div className="flex gap-3 pt-2">
+      <div className="flex gap-3 pt-2 px-4 pb-4">
         <Button
           variant="outline"
           className="flex-1 gap-2 h-12 rounded-xl"

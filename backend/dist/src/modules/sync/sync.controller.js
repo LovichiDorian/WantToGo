@@ -16,37 +16,40 @@ exports.SyncController = void 0;
 const common_1 = require("@nestjs/common");
 const sync_service_1 = require("./sync.service");
 const sync_dto_1 = require("./sync.dto");
-const TEMP_USER_ID = 'default-user-id';
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let SyncController = class SyncController {
     syncService;
     constructor(syncService) {
         this.syncService = syncService;
     }
-    async bulkSync(dto) {
-        return this.syncService.processBulkSync(TEMP_USER_ID, dto);
+    async bulkSync(dto, req) {
+        return this.syncService.processBulkSync(req.user.id, dto);
     }
-    async getChanges(since) {
+    async getChanges(since, req) {
         const sinceDate = since ? new Date(since) : new Date(0);
-        return this.syncService.getChangesSince(TEMP_USER_ID, sinceDate);
+        return this.syncService.getChangesSince(req.user.id, sinceDate);
     }
 };
 exports.SyncController = SyncController;
 __decorate([
     (0, common_1.Post)('bulk'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [sync_dto_1.BulkSyncRequestDto]),
+    __metadata("design:paramtypes", [sync_dto_1.BulkSyncRequestDto, Object]),
     __metadata("design:returntype", Promise)
 ], SyncController.prototype, "bulkSync", null);
 __decorate([
     (0, common_1.Get)('changes'),
     __param(0, (0, common_1.Query)('since')),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], SyncController.prototype, "getChanges", null);
 exports.SyncController = SyncController = __decorate([
     (0, common_1.Controller)('sync'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:paramtypes", [sync_service_1.SyncService])
 ], SyncController);
 //# sourceMappingURL=sync.controller.js.map

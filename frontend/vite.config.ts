@@ -158,7 +158,8 @@ export default defineConfig({
   },
   define: {
     // Make env vars available at build time
-    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'http://localhost:3001/api'),
+    // Use relative /api path for production (nginx proxy), or localhost for dev
+    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || '/api'),
   },
   build: {
     // Ensure service worker is properly built
@@ -173,7 +174,7 @@ export default defineConfig({
     // Proxy API requests in development
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3010',
         changeOrigin: true,
       },
     },
