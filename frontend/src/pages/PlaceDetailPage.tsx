@@ -24,7 +24,8 @@ import {
 } from '@/components/ui/dialog';
 import { usePlaces } from '@/features/places/hooks/usePlaces';
 import { getPlaceHeroUrl } from '@/lib/utils/placeImage';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { apiRequest } from '@/lib/api/client';
 
 /**
  * Modern place detail page with card-based layout
@@ -37,8 +38,34 @@ export function PlaceDetailPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
 
   const place = useMemo(() => places.find((p) => p.id === id), [places, id]);
+
+  // Fetch place image from backend API
+  useEffect(() => {
+    if (!id || !place) return;
+
+    // If place has user photos, use the first one directly
+    if (place.photos && place.photos.length > 0 && place.photos[0].filename) {
+      setHeroImageUrl(place.photos[0].filename);
+      return;
+    }
+
+    // Fetch image from backend API
+    const fetchImage = async () => {
+      try {
+        const response = await apiRequest<{ imageUrl: string; source: string }>(`/places/${id}/image`);
+        setHeroImageUrl(response.imageUrl);
+      } catch (error) {
+        console.warn('Failed to fetch place image from API, using fallback:', error);
+        // Fallback to local Unsplash Source
+        setHeroImageUrl(getPlaceHeroUrl(place.name));
+      }
+    };
+
+    fetchImage();
+  }, [id, place]);
 
   const handleDelete = async () => {
     if (!id) return;
@@ -94,8 +121,8 @@ export function PlaceDetailPage() {
 
   const isPending = place.syncStatus === 'pending';
   
-  // Get image URL from photos or generate from place name
-  const heroImageUrl = place.photos?.[0]?.filename || getPlaceHeroUrl(place.name);
+  // Use fallback image if API hasn't responded yet
+  const displayImageUrl = heroImageUrl || getPlaceHeroUrl(place.name);
 
   return (
     <div className="space-y-6 -mx-4 -mt-4">
@@ -103,7 +130,7 @@ export function PlaceDetailPage() {
       <div className="relative h-56 overflow-hidden">
         {/* Background Image */}
         <img 
-          src={heroImageUrl}
+          src={displayImageUrl}
           alt={place.name}
           className={`w-full h-full object-cover transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImageLoaded(true)}
