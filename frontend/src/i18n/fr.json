@@ -20,9 +20,13 @@
     "undo": "Annuler",
     "retry": "Réessayer",
     "seeAll": "Voir tout",
-    "viewMore": "Voir plus"
+    "viewMore": "Voir plus",
+    "claimed": "Réclamé",
+    "more": "de plus",
+    "later": "Plus tard"
   },
   "nav": {
+    "home": "Accueil",
     "places": "Lieux",
     "map": "Carte",
     "add": "Ajouter",
@@ -32,6 +36,103 @@
     "profile": "Profil",
     "leaderboard": "Classement",
     "trips": "Voyages"
+  },
+  "home": {
+    "greeting": "Prêt à explorer ?",
+    "welcomeBack": "Content de te revoir ! 🎉",
+    "traveler": "Voyageur",
+    "dailyQuests": "Quêtes du jour",
+    "quickActions": "Actions rapides",
+    "yourMap": "Ta carte",
+    "placesOnMap": "lieux sur la carte",
+    "stats": {
+      "placesAdded": "Lieux ajoutés",
+      "placesVisited": "Lieux visités"
+    },
+    "emptyState": {
+      "title": "Commence l'aventure !",
+      "description": "Ajoute ton premier lieu pour gagner 100 XP",
+      "cta": "Ajouter un lieu"
+    }
+  },
+  "onboarding": {
+    "skip": "Passer",
+    "continue": "Continuer",
+    "getStarted": "C'est parti !",
+    "welcomeBonus": "Bonus de bienvenue : +100 XP",
+    "slide1": {
+      "title": "Sauvegarde tes lieux",
+      "description": "Enregistre tous les endroits que tu veux visiter avec des notes, photos et coordonnées GPS"
+    },
+    "slide2": {
+      "title": "Gagne des récompenses",
+      "description": "Accumule des XP, débloque des badges et grimpe dans le classement en explorant le monde"
+    },
+    "slide3": {
+      "title": "Partage avec tes amis",
+      "description": "Connecte-toi avec tes amis, partage tes découvertes et planifiez des voyages ensemble"
+    },
+    "features": {
+      "saveLocations": "Sauvegarder",
+      "addPhotos": "Photos",
+      "takeNotes": "Notes",
+      "earnXP": "Gagner XP",
+      "unlockBadges": "Badges",
+      "buildStreaks": "Séries",
+      "addFriends": "Amis",
+      "shareTrips": "Voyages",
+      "compete": "Classement"
+    }
+  },
+  "streak": {
+    "days": "jours",
+    "days_one": "jour",
+    "days_other": "jours"
+  },
+  "levels": {
+    "explorer": "Explorateur",
+    "wanderer": "Vagabond",
+    "traveler": "Voyageur",
+    "adventurer": "Aventurier",
+    "expert": "Expert",
+    "master": "Maître",
+    "legend": "Légende"
+  },
+  "dailyQuests": {
+    "bonusTitle": "Bonus du jour",
+    "bonusDescription": "Complète les 3 quêtes ({{completed}}/{{total}})",
+    "addPlace": {
+      "title": "Nouveau lieu",
+      "description": "Ajoute un lieu à ta carte"
+    },
+    "addPlaces": {
+      "title": "Explorateur",
+      "description": "Ajoute 3 lieux aujourd'hui"
+    },
+    "addPhoto": {
+      "title": "Photographe",
+      "description": "Ajoute une photo à un lieu"
+    },
+    "addPhotos": {
+      "title": "Album photo",
+      "description": "Ajoute 3 photos aujourd'hui"
+    },
+    "visitPlace": {
+      "title": "Sur place !",
+      "description": "Marque un lieu comme visité"
+    },
+    "addFriend": {
+      "title": "Social",
+      "description": "Ajoute un nouvel ami"
+    },
+    "exploreMap": {
+      "title": "Carte",
+      "description": "Consulte ta carte"
+    },
+    "checkLeaderboard": {
+      "title": "Compétiteur",
+      "description": "Consulte le classement"
+    }
   },
   "places": {
     "title": "Mes lieux",
@@ -83,7 +184,10 @@
     "filterTrips": "Filtrer par voyage",
     "showVisited": "Afficher les visités",
     "hideVisited": "Masquer les visités",
-    "visitedMarker": "Visité"
+    "visitedMarker": "Visité",
+    "heatmap": "Carte thermique",
+    "satellite": "Satellite",
+    "nearby": "À proximité"
   },
   "settings": {
     "title": "Paramètres",
@@ -131,10 +235,18 @@
     "version": "Version"
   },
   "pwa": {
-    "install": "Installer l'application",
+    "install": "Installer l'app",
+    "installDescription": "Installez WantToGo sur votre écran d'accueil pour un accès rapide",
     "updateAvailable": "Une nouvelle version est disponible",
     "updateNow": "Mettre à jour maintenant",
-    "installed": "Merci d'avoir installé WantToGo !"
+    "installed": "Installation réussie !",
+    "installedDescription": "WantToGo est maintenant sur votre écran d'accueil",
+    "addToHomeScreen": "Installer",
+    "features": {
+      "fast": "Ultra rapide",
+      "offline": "Hors ligne",
+      "notifications": "Notifications"
+    }
   },
   "offline": {
     "youAreOffline": "Vous êtes hors ligne",
@@ -208,7 +320,7 @@
   },
   "gamification": {
     "xp": "XP",
-    "level": "Niveau {{level}}",
+    "level": "Niv. {{level}}",
     "levelUp": "Niveau supérieur !",
     "levelUpMessage": "Vous avez atteint le niveau {{level}} ! 🎉",
     "xpEarned": "+{{xp}} XP",
@@ -223,7 +335,9 @@
       "placeVisited": "Lieu visité",
       "visitedNearby": "Visité sur place",
       "friendInvited": "Ami inscrit",
-      "achievementUnlocked": "Succès débloqué"
+      "achievementUnlocked": "Succès débloqué",
+      "dailyQuest": "Quête du jour",
+      "streak": "Bonus série"
     }
   },
   "achievements": {
@@ -284,6 +398,18 @@
     "trip_creator": {
       "name": "Organisateur de Voyage",
       "description": "Créez votre premier voyage collaboratif"
+    },
+    "streak_7": {
+      "name": "En Feu",
+      "description": "Maintenez une série de 7 jours"
+    },
+    "streak_30": {
+      "name": "Inarrêtable",
+      "description": "Maintenez une série de 30 jours"
+    },
+    "speedrunner": {
+      "name": "Speedrunner",
+      "description": "Ajoutez 10 lieux en une journée"
     }
   },
   "profile": {
@@ -377,7 +503,7 @@
     "comingSoonDescription": "Les abonnements Premium seront bientôt disponibles !",
     "notifyMe": "Me notifier",
     "notifyMeDescription": "Nous vous préviendrons quand Premium sera lancé",
-    "freeTrial": "Essayez 1 itinéraire gratuit",
+    "freeTrial": "Essayez 7 jours gratuits",
     "upgradeNow": "Passer Premium",
     "alreadyPremium": "Vous êtes membre Premium !",
     "expiresOn": "Expire le {{date}}",
@@ -413,7 +539,9 @@
     "levelUp": "Niveau supérieur !",
     "levelUpBody": "Félicitations ! Vous avez atteint le niveau {{level}}",
     "achievementUnlocked": "Succès débloqué !",
-    "achievementUnlockedBody": "Vous avez obtenu \"{{name}}\" ! +{{xp}} XP"
+    "achievementUnlockedBody": "Vous avez obtenu \"{{name}}\" ! +{{xp}} XP",
+    "streakReminder": "Maintenez votre série !",
+    "streakReminderBody": "N'oubliez pas d'ajouter un lieu aujourd'hui pour garder votre série de {{days}} jours"
   },
   "errors": {
     "generic": "Une erreur est survenue",

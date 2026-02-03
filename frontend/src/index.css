@@ -1,7 +1,14 @@
 @import "tailwindcss";
 
+/* ========================================
+   WANTTOGO 2.0 - DESIGN SYSTEM 2026
+   Glassmorphism + Neumorphism + Micro-animations
+   ======================================== */
+
 @theme {
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-sans: 'SF Pro Display', 'Inter Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'SF Pro Display', 'Inter Variable', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
   
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -35,163 +42,375 @@
   --radius-sm: calc(var(--radius) - 4px);
 }
 
-/* Base Shadcn variables */
+/* Light Theme */
 :root {
-  --background: 0 0% 100%;
+  --background: 220 20% 98%;
   --foreground: 222.2 84% 4.9%;
-
   --card: 0 0% 100%;
   --card-foreground: 222.2 84% 4.9%;
- 
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 84% 4.9%;
- 
-  --primary: 221.2 83.2% 53.3%;
+  --primary: 199 89% 48%;
   --primary-foreground: 210 40% 98%;
- 
   --secondary: 210 40% 96.1%;
   --secondary-foreground: 222.2 47.4% 11.2%;
- 
   --muted: 210 40% 96.1%;
   --muted-foreground: 215.4 16.3% 46.9%;
- 
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
- 
+  --accent: 263 70% 50%;
+  --accent-foreground: 210 40% 98%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
-
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
- 
-  --radius: 0.5rem;
+  --ring: 199 89% 48%;
+  --radius: 0.75rem;
 }
- 
+
+/* Dark Theme */
 .dark {
-  --background: 222.2 84% 4.9%;
+  --background: 222 47% 6%;
   --foreground: 210 40% 98%;
- 
-  --card: 222.2 84% 4.9%;
+  --card: 222 47% 9%;
   --card-foreground: 210 40% 98%;
- 
-  --popover: 222.2 84% 4.9%;
+  --popover: 222 47% 9%;
   --popover-foreground: 210 40% 98%;
- 
-  --primary: 217.2 91.2% 59.8%;
+  --primary: 199 89% 55%;
   --primary-foreground: 222.2 47.4% 11.2%;
- 
   --secondary: 217.2 32.6% 17.5%;
   --secondary-foreground: 210 40% 98%;
- 
   --muted: 217.2 32.6% 17.5%;
   --muted-foreground: 215 20.2% 65.1%;
- 
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
- 
-  --destructive: 0 62.8% 30.6%;
+  --accent: 263 70% 60%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 62.8% 50%;
   --destructive-foreground: 210 40% 98%;
- 
-  --border: 217.2 32.6% 17.5%;
+  --border: 217.2 32.6% 20%;
   --input: 217.2 32.6% 17.5%;
-  --ring: 224.3 76.3% 48%;
+  --ring: 199 89% 55%;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-    box-sizing: border-box;
-  }
-  
-  html {
-    /* Prevent iOS text size adjust after orientation change */
-    -webkit-text-size-adjust: 100%;
-    /* Smooth scrolling */
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-    /* Prevent pull-to-refresh on mobile */
-    overscroll-behavior-y: contain;
-    /* Prevent text selection on touch */
-    -webkit-touch-callout: none;
-    /* Safe area padding */
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  }
-  
-  html, body, #root {
-    @apply h-full;
-    /* Prevent horizontal scroll */
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
-  }
-  
-  /* Inputs should have 16px font to prevent iOS zoom */
-  input, select, textarea {
-    font-size: 16px !important;
-  }
-  
-  /* Touch-friendly tap targets */
-  button, a, [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Small buttons exception */
-  button.btn-sm, .h-8, .h-9, .h-10 {
-    min-height: auto;
-    min-width: auto;
-  }
+/* Base Styles */
+* {
+  border-color: hsl(var(--border));
+  box-sizing: border-box;
 }
 
-@layer utilities {
-  /* Safe area for notched devices */
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-  .pt-safe {
-    padding-top: env(safe-area-inset-top, 0);
-  }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
-/* Leaflet map customizations */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: contain;
+  min-height: 100dvh;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+button, a, [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+button.btn-sm, .h-8, .h-9, .h-10, .size-6, .size-8 {
+  min-height: auto;
+  min-width: auto;
+}
+
+::selection {
+  background: hsl(var(--primary) / 0.3);
+  color: hsl(var(--primary-foreground));
+}
+
+/* Glass Effect Classes */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glass-strong {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: all 0.3s ease-out;
+}
+
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card:hover {
+  box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Gradient Classes */
+.gradient-primary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #7c3aed 100%);
+}
+
+.gradient-xp {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #7c3aed 100%);
+}
+
+.gradient-streak {
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+}
+
+.gradient-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+}
+
+.gradient-hero {
+  background: linear-gradient(180deg, #0ea5e9 0%, #7c3aed 50%, #1e1b4b 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #0ea5e9 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-xp {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glow Effects */
+.glow {
+  box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+}
+
+.glow-sm {
+  box-shadow: 0 0 10px hsl(var(--primary) / 0.3);
+}
+
+.glow-streak {
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+}
+
+/* Safe Area */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch Scale Animation */
+.touch-scale {
+  transition: transform 0.15s ease-out;
+}
+
+.touch-scale:active {
+  transform: scale(0.97);
+}
+
+/* Hover Scale Animation */
+.hover-scale {
+  transition: transform 0.2s ease-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-scale:active {
+  transform: scale(0.98);
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Pulse Glow Animation */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px hsl(var(--primary) / 0.3); }
+  50% { box-shadow: 0 0 20px hsl(var(--primary) / 0.6); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Float Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Flame Animation */
+@keyframes flame {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  50% { transform: scale(1.05) rotate(2deg); }
+}
+
+.flame {
+  animation: flame 0.5s ease-in-out infinite alternate;
+}
+
+/* Quest Card Styles */
+.quest-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .quest-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quest-card-complete {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+/* Leaflet Map Customizations */
 .leaflet-container {
   font-family: inherit;
   z-index: 0;
+  border-radius: 0.5rem;
 }
 
 .leaflet-popup-content-wrapper {
-  @apply rounded-xl shadow-lg border border-border/50 bg-background/95 backdrop-blur-sm;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.dark .leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .leaflet-popup-content {
-  @apply m-0 p-3 text-foreground;
+  margin: 0;
+  padding: 1rem;
+  color: hsl(var(--foreground));
 }
 
 .leaflet-popup-tip {
-  @apply bg-background/95;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.dark .leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.9);
 }
 
 .leaflet-popup-close-button {
   color: hsl(var(--muted-foreground)) !important;
+  font-size: 20px !important;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 4px !important;
 }
+
 .leaflet-popup-close-button:hover {
   color: hsl(var(--foreground)) !important;
 }
 
-/* User location marker animation */
+/* Place Marker */
+.place-marker {
+  background: transparent;
+  border: none;
+}
+
 .user-location-marker {
   background: transparent;
   border: none;
 }
 
-.user-location-marker .animate-ping {
-  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+.friend-marker {
+  background: transparent;
+  border: none;
 }
 
+/* Ping Animation */
 @keyframes ping {
   75%, 100% {
     transform: scale(2.5);
@@ -199,61 +418,68 @@
   }
 }
 
-/* Place marker styling */
-.place-marker {
-  background: transparent;
-  border: none;
+.user-location-marker .animate-ping {
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-/* Smooth transitions */
-.transition-smooth {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Skeleton Loading */
+@keyframes skeleton-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-/* Hide scrollbar but keep functionality */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: hsl(var(--muted) / 0.6);
 }
 
-/* Glass effect */
-.glass {
-  @apply bg-background/80 backdrop-blur-xl border border-border/50;
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.05), transparent);
+  animation: skeleton-shimmer 1.5s infinite;
 }
 
-/* Friend marker styling */
-.friend-marker {
-  background: transparent;
-  border: none;
+/* Notification Dot */
+@keyframes notification-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
 }
 
-/* Better mobile spacing for cards */
+.notification-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background-color: hsl(var(--destructive));
+  border-radius: 50%;
+  animation: notification-pulse 2s ease-in-out infinite;
+}
+
+/* Responsive */
 @media (max-width: 390px) {
-  /* iPhone SE/Mini */
   .place-card-mobile {
     padding: 0.875rem;
   }
-  
-  .friend-code-display {
-    font-size: 1.125rem;
-    letter-spacing: 0.1em;
-  }
 }
 
-/* Safe area for iPhones with notch */
 @supports (padding-top: env(safe-area-inset-top)) {
   .header-safe {
     padding-top: env(safe-area-inset-top);
   }
 }
 
-/* Improved touch feedback */
-.touch-scale {
-  transition: transform 0.15s ease-out;
-}
-.touch-scale:active {
-  transform: scale(0.97);
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .glass, .glass-card, .glass-strong {
+    background: white !important;
+    backdrop-filter: none !important;
+  }
 }

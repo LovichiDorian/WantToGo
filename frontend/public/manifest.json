@@ -1,21 +1,57 @@
 {
-  "name": "WannaGo - Planificateur de Voyages",
-  "short_name": "WannaGo",
-  "description": "Enregistrez et partagez les lieux que vous voulez visiter. Planifiez vos voyages avec l'assistant IA.",
+  "name": "WantToGo - Gamified Travel Planner",
+  "short_name": "WantToGo",
+  "description": "Save places, earn XP, unlock badges, compete with friends. The gamified travel app that makes exploring addictive!",
   "start_url": "/",
   "id": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
-  "background_color": "#0a0a0a",
-  "theme_color": "#3b82f6",
+  "background_color": "#0f172a",
+  "theme_color": "#0ea5e9",
   "orientation": "portrait",
   "scope": "/",
-  "lang": "fr",
+  "lang": "en",
   "dir": "ltr",
   "icons": [
     {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
@@ -26,41 +62,70 @@
       "purpose": "any"
     },
     {
+      "src": "/icons/icon-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "src": "/icons/icon-maskable-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "categories": ["travel", "navigation", "lifestyle", "social"],
+  "categories": ["travel", "navigation", "lifestyle", "social", "games"],
   "shortcuts": [
     {
-      "name": "Ajouter un lieu",
-      "short_name": "Ajouter",
-      "description": "Ajouter un nouveau lieu à visiter",
+      "name": "Add Place",
+      "short_name": "Add",
+      "description": "Add a new place to visit",
       "url": "/add",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Voir la carte",
-      "short_name": "Carte",
-      "description": "Voir tous les lieux sur la carte",
+      "name": "View Map",
+      "short_name": "Map",
+      "description": "See all places on the map",
       "url": "/map",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Assistant IA",
-      "short_name": "IA",
-      "description": "Planifier un voyage avec l'assistant",
-      "url": "/assistant",
+      "name": "Leaderboard",
+      "short_name": "Rank",
+      "description": "Check your ranking",
+      "url": "/leaderboard",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Mes amis",
-      "short_name": "Amis",
-      "description": "Gérer mes amis et voir leurs lieux",
-      "url": "/friends",
+      "name": "Profile",
+      "short_name": "Profile",
+      "description": "View your badges and stats",
+      "url": "/profile",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home-dark.png",
+      "sizes": "1170x2532",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Home Dashboard with XP and Daily Quests"
+    },
+    {
+      "src": "/screenshots/map-dark.png",
+      "sizes": "1170x2532",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Interactive Map with your places"
+    },
+    {
+      "src": "/screenshots/profile-dark.png",
+      "sizes": "1170x2532",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Profile with badges and achievements"
     }
   ],
   "related_applications": [],
