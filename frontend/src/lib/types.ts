@@ -19,6 +19,7 @@ export interface FriendPlace {
   longitude: number;
   address?: string;
   tripDate?: string;
+  isVisited?: boolean;
 }
 
 export interface Place {
@@ -30,7 +31,15 @@ export interface Place {
   latitude: number;
   longitude: number;
   address?: string;
+  city?: string;
+  country?: string;
   tripDate?: string;
+  
+  // Visited tracking
+  isVisited?: boolean;
+  visitedAt?: string | null;
+  visitedWithGeoloc?: boolean;
+  
   photos: Photo[];
   createdAt: string;
   updatedAt: string;

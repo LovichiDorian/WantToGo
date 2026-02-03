@@ -47,12 +47,33 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcrypt"));
 const prisma_service_1 = require("../../prisma/prisma.service");
+const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const CODE_LENGTH = 6;
+function generateShortCode() {
+    let code = '';
+    for (let i = 0; i < CODE_LENGTH; i++) {
+        code += CODE_CHARS.charAt(Math.floor(Math.random() * CODE_CHARS.length));
+    }
+    return code;
+}
 let AuthService = class AuthService {
     prisma;
     jwtService;
     constructor(prisma, jwtService) {
         this.prisma = prisma;
         this.jwtService = jwtService;
+    }
+    async generateUniqueShareCode() {
+        let code;
+        let exists = true;
+        while (exists) {
+            code = generateShortCode();
+            const existingUser = await this.prisma.user.findUnique({
+                where: { shareCode: code },
+            });
+            exists = !!existingUser;
+        }
+        return code;
     }
     async register(dto) {
         const existingUser = await this.prisma.user.findUnique({
@@ -62,11 +83,13 @@ let AuthService = class AuthService {
             throw new common_1.ConflictException('Email already registered');
         }
         const hashedPassword = await bcrypt.hash(dto.password, 10);
+        const shareCode = await this.generateUniqueShareCode();
         const user = await this.prisma.user.create({
             data: {
                 email: dto.email,
                 password: hashedPassword,
                 name: dto.name || dto.email.split('@')[0],
+                shareCode,
             },
         });
         const accessToken = this.generateToken(user.id, user.email);

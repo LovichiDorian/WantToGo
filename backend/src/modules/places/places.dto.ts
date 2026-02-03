@@ -1,5 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsDateString, IsArray, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsNumber, IsOptional, IsDateString, IsBoolean } from 'class-validator';
 
 export class CreatePlaceDto {
   @IsString()
@@ -18,6 +17,14 @@ export class CreatePlaceDto {
   @IsOptional()
   @IsString()
   address?: string;
+
+  @IsOptional()
+  @IsString()
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
 
   @IsOptional()
   @IsDateString()
@@ -50,6 +57,28 @@ export class UpdatePlaceDto {
   address?: string;
 
   @IsOptional()
+  @IsString()
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @IsOptional()
   @IsDateString()
   tripDate?: string;
+}
+
+export class MarkVisitedDto {
+  @IsOptional()
+  @IsBoolean()
+  isNearby?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  userLatitude?: number;
+
+  @IsOptional()
+  @IsNumber()
+  userLongitude?: number;
 }

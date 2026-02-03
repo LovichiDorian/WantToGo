@@ -9,7 +9,18 @@
     "confirm": "Confirmer",
     "goBack": "Retour",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "comingSoon": "Bientôt disponible",
+    "premium": "Premium",
+    "free": "Gratuit",
+    "upgrade": "Passer Premium",
+    "share": "Partager",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "undo": "Annuler",
+    "retry": "Réessayer",
+    "seeAll": "Voir tout",
+    "viewMore": "Voir plus"
   },
   "nav": {
     "places": "Lieux",
@@ -17,7 +28,10 @@
     "add": "Ajouter",
     "friends": "Amis",
     "assistant": "IA",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "leaderboard": "Classement",
+    "trips": "Voyages"
   },
   "places": {
     "title": "Mes lieux",
@@ -44,7 +58,19 @@
     "gallery": "Galerie",
     "openInMaps": "Ouvrir dans Maps",
     "deleteConfirmTitle": "Supprimer ce lieu ?",
-    "deleteConfirmDescription": "\"{{name}}\" sera supprimé définitivement. Cette action est irréversible."
+    "deleteConfirmDescription": "\"{{name}}\" sera supprimé définitivement. Cette action est irréversible.",
+    "markVisited": "Marquer comme visité",
+    "markNotVisited": "Marquer comme non visité",
+    "visited": "Visité",
+    "notVisited": "Pas encore visité",
+    "visitedOn": "Visité le {{date}}",
+    "visitedNearby": "Visité sur place !",
+    "visitedConfirmTitle": "Marquer comme visité ?",
+    "visitedConfirmDescription": "Vous gagnerez +{{xp}} XP pour avoir visité \"{{name}}\"",
+    "visitedWithGeoloc": "Vous y êtes ! +{{bonus}} XP bonus",
+    "undoVisited": "Annuler ({{hours}}h restantes)",
+    "findHotels": "Trouver des hôtels à proximité",
+    "sponsoredPlace": "Sponsorisé"
   },
   "map": {
     "title": "Carte",
@@ -53,7 +79,11 @@
     "yourLocation": "Vous êtes ici",
     "viewDetails": "Voir les détails",
     "noPlaces": "Ajoutez votre premier lieu pour le voir sur la carte",
-    "recenter": "Recentrer"
+    "recenter": "Recentrer",
+    "filterTrips": "Filtrer par voyage",
+    "showVisited": "Afficher les visités",
+    "hideVisited": "Masquer les visités",
+    "visitedMarker": "Visité"
   },
   "settings": {
     "title": "Paramètres",
@@ -96,7 +126,9 @@
     "exportSuccess": "{{count}} lieux exportés avec succès",
     "importSuccess": "{{count}} lieux importés avec succès",
     "importError": "Erreur lors de l'import du fichier",
-    "noPlacesToExport": "Aucun lieu à exporter"
+    "noPlacesToExport": "Aucun lieu à exporter",
+    "account": "Compte",
+    "version": "Version"
   },
   "pwa": {
     "install": "Installer l'application",
@@ -108,7 +140,8 @@
     "youAreOffline": "Vous êtes hors ligne",
     "syncing": "Synchronisation...",
     "syncComplete": "Synchronisation terminée",
-    "syncFailed": "Échec de la synchronisation"
+    "syncFailed": "Échec de la synchronisation",
+    "xpSyncPending": "Les XP seront synchronisés une fois en ligne"
   },
   "camera": {
     "permissionDenied": "Accès à la caméra refusé. Veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur.",
@@ -141,7 +174,9 @@
     "friendAddedDescription": "Ses lieux apparaissent maintenant sur votre carte",
     "codeNotFound": "Code invalide ou ami introuvable",
     "refresh": "Actualiser",
-    "placeFrom": "Lieu partagé par {{name}}"
+    "placeFrom": "Lieu partagé par {{name}}",
+    "inviteFriend": "Inviter un ami",
+    "inviteSuccess": "Ami inscrit ! +{{xp}} XP"
   },
   "auth": {
     "login": "Se connecter",
@@ -170,5 +205,221 @@
     "addedToMap": "Ajouté à la carte",
     "addedFromAssistant": "Ajouté via l'assistant voyage",
     "poweredBy": "Propulsé par IA"
+  },
+  "gamification": {
+    "xp": "XP",
+    "level": "Niveau {{level}}",
+    "levelUp": "Niveau supérieur !",
+    "levelUpMessage": "Vous avez atteint le niveau {{level}} ! 🎉",
+    "xpEarned": "+{{xp}} XP",
+    "xpToNextLevel": "{{xp}} XP avant le niveau {{level}}",
+    "currentLevel": "Niveau actuel",
+    "totalXp": "XP total",
+    "nextLevel": "Prochain niveau",
+    "progress": "{{percent}}% de progression",
+    "xpSources": {
+      "placeAdded": "Lieu ajouté",
+      "photoAdded": "Photo ajoutée",
+      "placeVisited": "Lieu visité",
+      "visitedNearby": "Visité sur place",
+      "friendInvited": "Ami inscrit",
+      "achievementUnlocked": "Succès débloqué"
+    }
+  },
+  "achievements": {
+    "title": "Succès",
+    "unlocked": "Débloqué !",
+    "unlockedOn": "Débloqué le {{date}}",
+    "locked": "Verrouillé",
+    "progress": "{{current}}/{{target}}",
+    "rewardXp": "+{{xp}} XP",
+    "newAchievement": "Nouveau succès !",
+    "viewAll": "Voir tous les succès",
+    "noAchievements": "Aucun succès",
+    "noAchievementsDescription": "Commencez à explorer pour débloquer votre premier succès !",
+    "first_place": {
+      "name": "Premiers Pas",
+      "description": "Ajoutez votre premier lieu sur la carte"
+    },
+    "explorer_5": {
+      "name": "Explorateur Curieux",
+      "description": "Ajoutez 5 lieux sur votre carte"
+    },
+    "explorer_25": {
+      "name": "Explorateur Aguerri",
+      "description": "Ajoutez 25 lieux sur votre carte"
+    },
+    "city_explorer": {
+      "name": "Explorateur de Ville",
+      "description": "Ajoutez 10 lieux dans la même ville"
+    },
+    "globetrotter": {
+      "name": "Globe-trotteur",
+      "description": "Ajoutez des lieux dans 5 pays différents"
+    },
+    "planner_pro": {
+      "name": "Planificateur Pro",
+      "description": "Ajoutez 20 lieux avec des dates planifiées"
+    },
+    "social_traveler": {
+      "name": "Voyageur Social",
+      "description": "Ajoutez 5 amis à votre réseau"
+    },
+    "photographer": {
+      "name": "Photographe Voyageur",
+      "description": "Ajoutez 10 photos à vos lieux"
+    },
+    "first_visited": {
+      "name": "Rêve Réalisé",
+      "description": "Marquez votre premier lieu comme visité"
+    },
+    "visited_10": {
+      "name": "Aventurier",
+      "description": "Visitez 10 lieux de votre wishlist"
+    },
+    "geoloc_master": {
+      "name": "Sur Place",
+      "description": "Marquez 5 lieux comme visités en étant sur place"
+    },
+    "trip_creator": {
+      "name": "Organisateur de Voyage",
+      "description": "Créez votre premier voyage collaboratif"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "myProfile": "Mon Profil",
+    "stats": "Statistiques",
+    "placesAdded": "Lieux ajoutés",
+    "placesVisited": "Lieux visités",
+    "photosAdded": "Photos ajoutées",
+    "friendsCount": "Amis",
+    "countriesVisited": "Pays",
+    "citiesExplored": "Villes explorées",
+    "totalDistance": "Distance totale",
+    "km": "km",
+    "memberSince": "Membre depuis {{date}}",
+    "editProfile": "Modifier le profil",
+    "advancedStats": "Statistiques avancées",
+    "advancedStatsDescription": "Débloquez les stats détaillées avec Premium",
+    "xpHistory": "Historique XP",
+    "countryHeatmap": "Carte des pays",
+    "topCities": "Top 5 Villes"
+  },
+  "leaderboard": {
+    "title": "Classement",
+    "friendsLeaderboard": "Classement Amis",
+    "globalLeaderboard": "Classement Global",
+    "rank": "Rang",
+    "player": "Joueur",
+    "thisMonth": "Ce mois-ci",
+    "allTime": "Tout temps",
+    "placesAdded": "Lieux",
+    "placesVisited": "Visités",
+    "xpEarned": "XP gagnés",
+    "monthlyChallenge": "Défi Mensuel",
+    "challengeDescription": "Qui ajoute le plus de lieux ce mois-ci ?",
+    "daysLeft": "{{days}} jours restants",
+    "yourRank": "Votre rang : #{{rank}}",
+    "noFriendsYet": "Ajoutez des amis pour voir le classement",
+    "you": "Vous",
+    "winner": "Gagnant !"
+  },
+  "trips": {
+    "title": "Voyages",
+    "myTrips": "Mes Voyages",
+    "createTrip": "Nouveau Voyage",
+    "editTrip": "Modifier le voyage",
+    "deleteTrip": "Supprimer le voyage",
+    "noTrips": "Aucun voyage",
+    "noTripsDescription": "Créez votre premier voyage collaboratif !",
+    "tripName": "Nom du voyage",
+    "tripNamePlaceholder": "Vacances d'été 2026",
+    "description": "Description",
+    "descriptionPlaceholder": "Description du voyage...",
+    "members": "Membres",
+    "addMember": "Ajouter un membre",
+    "removeMember": "Retirer",
+    "places": "{{count}} lieu(x)",
+    "addPlace": "Ajouter un lieu au voyage",
+    "removePlace": "Retirer du voyage",
+    "public": "Public",
+    "private": "Privé",
+    "publicDescription": "N'importe qui avec le lien peut voir",
+    "owner": "Propriétaire",
+    "editor": "Éditeur",
+    "member": "Membre",
+    "leaveTrip": "Quitter le voyage",
+    "deleteConfirmTitle": "Supprimer ce voyage ?",
+    "deleteConfirmDescription": "\"{{name}}\" sera supprimé définitivement.",
+    "unlimitedTrips": "Voyages illimités",
+    "unlimitedTripsDescription": "Les membres Premium peuvent créer des voyages illimités",
+    "freeLimit": "Gratuit : {{current}}/{{max}} voyages"
+  },
+  "premium": {
+    "title": "Premium",
+    "subtitle": "Débloquez toutes les fonctionnalités",
+    "currentPlan": "Forfait actuel",
+    "freePlan": "Gratuit",
+    "premiumPlan": "Premium",
+    "lifetimePlan": "À vie",
+    "monthlyPrice": "4,99 €/mois",
+    "lifetimePrice": "49 € une fois",
+    "features": {
+      "advancedStats": "Statistiques avancées",
+      "countryHeatmap": "Carte thermique des pays",
+      "xpChart": "Graphique de progression XP",
+      "unlimitedTrips": "Voyages collaboratifs illimités",
+      "pdfExport": "Exports PDF",
+      "prioritySupport": "Support prioritaire"
+    },
+    "comingSoon": "Bientôt disponible",
+    "comingSoonDescription": "Les abonnements Premium seront bientôt disponibles !",
+    "notifyMe": "Me notifier",
+    "notifyMeDescription": "Nous vous préviendrons quand Premium sera lancé",
+    "freeTrial": "Essayez 1 itinéraire gratuit",
+    "upgradeNow": "Passer Premium",
+    "alreadyPremium": "Vous êtes membre Premium !",
+    "expiresOn": "Expire le {{date}}",
+    "manageSub": "Gérer l'abonnement"
+  },
+  "feed": {
+    "title": "Activité",
+    "friendActivity": "Activité des amis",
+    "noActivity": "Aucune activité récente",
+    "noActivityDescription": "Les activités de vos amis apparaîtront ici",
+    "placeAdded": "{{name}} a ajouté {{place}}",
+    "placeVisited": "{{name}} a visité {{place}} ✅",
+    "photoAdded": "{{name}} a ajouté une photo à {{place}}",
+    "achievementUnlocked": "{{name}} a débloqué {{achievement}}",
+    "levelUp": "{{name}} a atteint le niveau {{level}} !",
+    "justNow": "À l'instant",
+    "minutesAgo": "Il y a {{count}} min",
+    "hoursAgo": "Il y a {{count}}h",
+    "daysAgo": "Il y a {{count}}j"
+  },
+  "booking": {
+    "findHotels": "Trouver des hôtels",
+    "findHotelsNear": "Trouver des hôtels près de {{place}}",
+    "poweredBy": "Propulsé par Booking.com",
+    "affiliate": "Lien affilié"
+  },
+  "notifications": {
+    "nearPlace": "Vous êtes près d'un lieu !",
+    "nearPlaceBody": "\"{{name}}\" est à proximité. Le marquer comme visité ?",
+    "dailyQuest": "Quête du jour",
+    "dailyQuestBody": "Ajoutez un nouveau lieu aujourd'hui pour gagner des XP bonus !",
+    "friendActivity": "Activité d'un ami",
+    "levelUp": "Niveau supérieur !",
+    "levelUpBody": "Félicitations ! Vous avez atteint le niveau {{level}}",
+    "achievementUnlocked": "Succès débloqué !",
+    "achievementUnlockedBody": "Vous avez obtenu \"{{name}}\" ! +{{xp}} XP"
+  },
+  "errors": {
+    "generic": "Une erreur est survenue",
+    "network": "Erreur réseau. Veuillez vérifier votre connexion.",
+    "unauthorized": "Veuillez vous reconnecter",
+    "notFound": "Non trouvé",
+    "serverError": "Erreur serveur. Veuillez réessayer plus tard."
   }
 }

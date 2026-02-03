@@ -11,6 +11,13 @@ import { PhotosModule } from './modules/photos/photos.module';
 import { FriendsModule } from './modules/friends/friends.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AssistantModule } from './modules/assistant/assistant.module';
+import { PlaceImageModule } from './modules/place-image/place-image.module';
+// New modules for gamification, social features, and premium
+import { GamificationModule } from './modules/gamification/gamification.module';
+import { ActivitiesModule } from './modules/activities/activities.module';
+import { LeaderboardModule } from './modules/leaderboard/leaderboard.module';
+import { TripsModule } from './modules/trips/trips.module';
+import { PremiumModule } from './modules/premium/premium.module';
 
 @Module({
   imports: [
@@ -29,6 +36,13 @@ import { AssistantModule } from './modules/assistant/assistant.module';
     PhotosModule,
     FriendsModule,
     AssistantModule,
+    PlaceImageModule,
+    // New modules
+    GamificationModule,
+    ActivitiesModule,
+    LeaderboardModule,
+    TripsModule,
+    PremiumModule,
   ],
   controllers: [AppController],
   providers: [AppService],

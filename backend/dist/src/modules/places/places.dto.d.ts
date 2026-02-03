@@ -4,6 +4,8 @@ export declare class CreatePlaceDto {
     latitude: number;
     longitude: number;
     address?: string;
+    city?: string;
+    country?: string;
     tripDate?: string;
     clientId?: string;
 }
@@ -13,5 +15,12 @@ export declare class UpdatePlaceDto {
     latitude?: number;
     longitude?: number;
     address?: string;
+    city?: string;
+    country?: string;
     tripDate?: string;
+}
+export declare class MarkVisitedDto {
+    isNearby?: boolean;
+    userLatitude?: number;
+    userLongitude?: number;
 }

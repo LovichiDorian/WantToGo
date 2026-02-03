@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdatePlaceDto = exports.CreatePlaceDto = void 0;
+exports.MarkVisitedDto = exports.UpdatePlaceDto = exports.CreatePlaceDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreatePlaceDto {
     name;
@@ -17,6 +17,8 @@ class CreatePlaceDto {
     latitude;
     longitude;
     address;
+    city;
+    country;
     tripDate;
     clientId;
 }
@@ -45,6 +47,16 @@ __decorate([
 ], CreatePlaceDto.prototype, "address", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePlaceDto.prototype, "city", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePlaceDto.prototype, "country", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], CreatePlaceDto.prototype, "tripDate", void 0);
@@ -59,6 +71,8 @@ class UpdatePlaceDto {
     latitude;
     longitude;
     address;
+    city;
+    country;
     tripDate;
 }
 exports.UpdatePlaceDto = UpdatePlaceDto;
@@ -89,7 +103,38 @@ __decorate([
 ], UpdatePlaceDto.prototype, "address", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePlaceDto.prototype, "city", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePlaceDto.prototype, "country", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], UpdatePlaceDto.prototype, "tripDate", void 0);
+class MarkVisitedDto {
+    isNearby;
+    userLatitude;
+    userLongitude;
+}
+exports.MarkVisitedDto = MarkVisitedDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], MarkVisitedDto.prototype, "isNearby", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], MarkVisitedDto.prototype, "userLatitude", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], MarkVisitedDto.prototype, "userLongitude", void 0);
 //# sourceMappingURL=places.dto.js.map

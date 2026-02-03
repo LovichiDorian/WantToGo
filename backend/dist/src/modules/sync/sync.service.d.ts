@@ -27,7 +27,12 @@ export declare class SyncService {
         latitude: number;
         longitude: number;
         address: string | null;
+        city: string | null;
+        country: string | null;
         tripDate: Date | null;
+        isVisited: boolean;
+        visitedAt: Date | null;
+        visitedWithGeoloc: boolean;
         deletedAt: Date | null;
         userId: string;
     })[]>;

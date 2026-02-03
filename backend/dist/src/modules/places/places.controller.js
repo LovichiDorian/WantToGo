@@ -17,13 +17,22 @@ const common_1 = require("@nestjs/common");
 const places_service_1 = require("./places.service");
 const places_dto_1 = require("./places.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const place_image_service_1 = require("../place-image/place-image.service");
 let PlacesController = class PlacesController {
     placesService;
-    constructor(placesService) {
+    placeImageService;
+    constructor(placesService, placeImageService) {
         this.placesService = placesService;
+        this.placeImageService = placeImageService;
     }
     async findAll(req) {
         return this.placesService.findAll(req.user.id);
+    }
+    async getStats(req) {
+        return this.placesService.getStats(req.user.id);
+    }
+    async getPlaceImage(id, req) {
+        return this.placeImageService.getPlaceImage(id, req.user.id);
     }
     async findOne(id, req) {
         return this.placesService.findOne(id, req.user.id);
@@ -33,6 +42,12 @@ let PlacesController = class PlacesController {
     }
     async update(id, dto, req) {
         return this.placesService.update(id, req.user.id, dto);
+    }
+    async markVisited(id, dto, req) {
+        return this.placesService.markVisited(id, req.user.id, dto);
+    }
+    async undoVisited(id, req) {
+        return this.placesService.undoVisited(id, req.user.id);
     }
     async remove(id, req) {
         await this.placesService.remove(id, req.user.id);
@@ -46,6 +61,21 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], PlacesController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('stats'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], PlacesController.prototype, "getStats", null);
+__decorate([
+    (0, common_1.Get)(':id/image'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], PlacesController.prototype, "getPlaceImage", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
@@ -72,6 +102,23 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PlacesController.prototype, "update", null);
 __decorate([
+    (0, common_1.Post)(':id/visited'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, places_dto_1.MarkVisitedDto, Object]),
+    __metadata("design:returntype", Promise)
+], PlacesController.prototype, "markVisited", null);
+__decorate([
+    (0, common_1.Delete)(':id/visited'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], PlacesController.prototype, "undoVisited", null);
+__decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
     __param(0, (0, common_1.Param)('id')),
@@ -83,6 +130,7 @@ __decorate([
 exports.PlacesController = PlacesController = __decorate([
     (0, common_1.Controller)('places'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __metadata("design:paramtypes", [places_service_1.PlacesService])
+    __metadata("design:paramtypes", [places_service_1.PlacesService,
+        place_image_service_1.PlaceImageService])
 ], PlacesController);
 //# sourceMappingURL=places.controller.js.map

@@ -8,10 +8,14 @@ import { MapPage } from '@/pages/MapPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { FriendsPage } from '@/pages/FriendsPage';
 import { AssistantPage } from '@/pages/AssistantPage';
+import { ProfilePage } from '@/pages/ProfilePage';
+import { LeaderboardPage } from '@/pages/LeaderboardPage';
+import { TripsPage } from '@/pages/TripsPage';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider, useAuth } from '@/features/auth/AuthContext';
+import { GamificationProvider } from '@/features/gamification/context/GamificationContext';
 import { Loader2 } from 'lucide-react';
 
 // Protected route wrapper
@@ -71,6 +75,10 @@ function AppRoutes() {
         <Route path="friends" element={<FriendsPage />} />
         <Route path="assistant" element={<AssistantPage />} />
         <Route path="settings" element={<SettingsPage />} />
+        {/* New gamification & social routes */}
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="leaderboard" element={<LeaderboardPage />} />
+        <Route path="trips" element={<TripsPage />} />
       </Route>
     </Routes>
   );
@@ -80,8 +88,10 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppRoutes />
-        <Toaster />
+        <GamificationProvider>
+          <AppRoutes />
+          <Toaster />
+        </GamificationProvider>
       </AuthProvider>
     </BrowserRouter>
   );

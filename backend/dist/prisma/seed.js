@@ -57,6 +57,7 @@ async function main() {
             OR: [
                 { email: 'test@test.com' },
                 { email: 'test@wanttogo.app' },
+                { shareCode: 'TEST01' },
                 { shareCode: 'test' },
             ],
         },
@@ -66,7 +67,7 @@ async function main() {
             email: 'test@test.com',
             password: hashedPassword,
             name: 'Utilisateur Test',
-            shareCode: 'test',
+            shareCode: 'TEST01',
         },
     });
     console.log('✅ Utilisateur de test créé :');
@@ -171,7 +172,7 @@ async function main() {
     console.log('   Mot de passe: test');
     console.log('');
     console.log('👥 AJOUT AMI :');
-    console.log('   Code ami: test');
+    console.log('   Code ami: TEST01');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 }
 main()

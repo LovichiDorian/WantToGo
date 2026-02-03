@@ -11,12 +11,18 @@ const common_1 = require("@nestjs/common");
 const places_controller_1 = require("./places.controller");
 const places_service_1 = require("./places.service");
 const auth_module_1 = require("../auth/auth.module");
+const place_image_module_1 = require("../place-image/place-image.module");
+const gamification_module_1 = require("../gamification/gamification.module");
 let PlacesModule = class PlacesModule {
 };
 exports.PlacesModule = PlacesModule;
 exports.PlacesModule = PlacesModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule],
+        imports: [
+            auth_module_1.AuthModule,
+            (0, common_1.forwardRef)(() => place_image_module_1.PlaceImageModule),
+            (0, common_1.forwardRef)(() => gamification_module_1.GamificationModule),
+        ],
         controllers: [places_controller_1.PlacesController],
         providers: [places_service_1.PlacesService],
         exports: [places_service_1.PlacesService],

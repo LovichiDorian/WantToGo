@@ -43,3 +43,49 @@ export async function deletePlace(id: string): Promise<void> {
     method: 'DELETE',
   });
 }
+
+/**
+ * Mark a place as visited
+ */
+export interface MarkVisitedResponse {
+  id: string;
+  isVisited: boolean;
+  visitedAt: string;
+  visitedWithGeoloc: boolean;
+  xpEarned: number;
+  bonusXp: number;
+  achievements: { code: string; xpReward: number }[];
+}
+
+export async function markPlaceVisited(
+  id: string, 
+  isNearby: boolean = false
+): Promise<MarkVisitedResponse> {
+  return apiRequest<MarkVisitedResponse>(`/places/${id}/visited`, {
+    method: 'POST',
+    body: JSON.stringify({ isNearby }),
+  });
+}
+
+/**
+ * Undo marking a place as visited (within 24h)
+ */
+export async function undoPlaceVisited(id: string): Promise<Place> {
+  return apiRequest<Place>(`/places/${id}/visited`, {
+    method: 'DELETE',
+  });
+}
+
+/**
+ * Get place statistics
+ */
+export interface PlaceStats {
+  totalPlaces: number;
+  visitedPlaces: number;
+  placesWithPhotos: number;
+  visitRate: number;
+}
+
+export async function getPlaceStats(): Promise<PlaceStats> {
+  return apiRequest<PlaceStats>('/places/stats');
+}

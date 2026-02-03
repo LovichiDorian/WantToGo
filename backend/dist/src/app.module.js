@@ -20,6 +20,12 @@ const photos_module_1 = require("./modules/photos/photos.module");
 const friends_module_1 = require("./modules/friends/friends.module");
 const auth_module_1 = require("./modules/auth/auth.module");
 const assistant_module_1 = require("./modules/assistant/assistant.module");
+const place_image_module_1 = require("./modules/place-image/place-image.module");
+const gamification_module_1 = require("./modules/gamification/gamification.module");
+const activities_module_1 = require("./modules/activities/activities.module");
+const leaderboard_module_1 = require("./modules/leaderboard/leaderboard.module");
+const trips_module_1 = require("./modules/trips/trips.module");
+const premium_module_1 = require("./modules/premium/premium.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -40,6 +46,12 @@ exports.AppModule = AppModule = __decorate([
             photos_module_1.PhotosModule,
             friends_module_1.FriendsModule,
             assistant_module_1.AssistantModule,
+            place_image_module_1.PlaceImageModule,
+            gamification_module_1.GamificationModule,
+            activities_module_1.ActivitiesModule,
+            leaderboard_module_1.LeaderboardModule,
+            trips_module_1.TripsModule,
+            premium_module_1.PremiumModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

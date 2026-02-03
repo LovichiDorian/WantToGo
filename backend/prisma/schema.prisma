@@ -11,9 +11,29 @@ model User {
   email       String       @unique
   password    String?      // Hashed password (null for legacy deviceId users)
   name        String?
-  shareCode   String       @unique @default(uuid()) // Code unique pour partager ses lieux
+  shareCode   String       @unique // Code court unique pour partager ses lieux (ex: ABC123)
+  
+  // Gamification
+  xp                 Int      @default(0)
+  level              Int      @default(1)
+  placesVisitedCount Int      @default(0)
+  language           String   @default("fr") // 'fr' | 'en'
+  
+  // Relations existantes
   places      Place[]
   friendships Friendship[] // Les amis que cet utilisateur a ajoutés
+  
+  // Nouvelles relations - Gamification
+  achievements    UserAchievement[]
+  activities      UserActivity[]
+  
+  // Nouvelles relations - Trips
+  createdTrips    Trip[]       @relation("TripCreator")
+  tripMemberships TripMember[]
+  
+  // Nouvelle relation - Subscription
+  subscription    UserSubscription?
+  
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -43,9 +63,17 @@ model Place {
   latitude    Float
   longitude   Float
   address     String?
+  city        String?   // Extracted city for achievements
+  country     String?   // Extracted country for achievements
   tripDate    DateTime?
   
+  // Visited tracking
+  isVisited       Boolean   @default(false)
+  visitedAt       DateTime?
+  visitedWithGeoloc Boolean @default(false) // Was user within 500m when marking visited
+  
   photos      Photo[]
+  tripPlaces  TripPlace[]
   
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -53,6 +81,8 @@ model Place {
 
   @@index([userId])
   @@index([updatedAt])
+  @@index([city])
+  @@index([country])
 }
 
 model Photo {
@@ -67,4 +97,122 @@ model Photo {
   createdAt DateTime @default(now())
 
   @@index([placeId])
+}
+
+// ==================== GAMIFICATION ====================
+
+model Achievement {
+  id            String            @id @default(uuid())
+  code          String            @unique // "city_explorer", "globetrotter", etc.
+  nameEn        String
+  nameFr        String
+  descriptionEn String
+  descriptionFr String
+  icon          String            // Emoji: "🏙️", "🌍", "📅", "👥"
+  xpReward      Int
+  criteria      Json              // { "type": "places_same_city", "count": 10 }
+  isGlobal      Boolean           @default(true)
+  sortOrder     Int               @default(0)
+  
+  users         UserAchievement[]
+  
+  createdAt     DateTime          @default(now())
+}
+
+model UserAchievement {
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  unlockedAt    DateTime    @default(now())
+  metadata      Json?       // Context data when unlocked
+  
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+model UserActivity {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type      String   // "place_added" | "place_visited" | "photo_added" | "friend_added" | "achievement_unlocked" | "level_up"
+  metadata  Json     // { placeId, placeName, achievementCode, newLevel, etc. }
+  xpEarned  Int      @default(0)
+  
+  createdAt DateTime @default(now())
+  
+  @@index([userId, createdAt])
+  @@index([createdAt]) // For global feed queries
+}
+
+// ==================== COLLABORATIVE TRIPS ====================
+
+model Trip {
+  id          String       @id @default(uuid())
+  nameEn      String
+  nameFr      String
+  description String?      @db.Text
+  coverImage  String?      // URL to cover image
+  creatorId   String
+  creator     User         @relation("TripCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  isPublic    Boolean      @default(false)
+  
+  members     TripMember[]
+  places      TripPlace[]
+  
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  @@index([creatorId])
+}
+
+model TripMember {
+  id       String   @id @default(uuid())
+  tripId   String
+  trip     Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role     String   @default("member") // "owner" | "editor" | "member"
+  joinedAt DateTime @default(now())
+  
+  @@unique([tripId, userId])
+  @@index([userId])
+}
+
+model TripPlace {
+  id       String   @id @default(uuid())
+  tripId   String
+  trip     Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  placeId  String
+  place    Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  addedBy  String?  // userId who added this place to the trip
+  addedAt  DateTime @default(now())
+  
+  @@unique([tripId, placeId])
+  @@index([tripId])
+}
+
+// ==================== MONETIZATION (STRUCTURE ONLY) ====================
+
+model UserSubscription {
+  id               String    @id @default(uuid())
+  userId           String    @unique
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Stripe fields (for future use)
+  stripeCustomerId String?
+  stripeSubId      String?
+  stripePriceId    String?
+  
+  status           String    @default("free") // "free" | "premium" | "lifetime" | "cancelled"
+  features         Json      @default("[]")   // ["advanced_stats", "unlimited_trips", "pdf_export"]
+  
+  startedAt        DateTime?
+  expiresAt        DateTime?
+  cancelledAt      DateTime?
+  
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
