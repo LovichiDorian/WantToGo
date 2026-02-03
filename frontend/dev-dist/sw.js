@@ -67,13 +67,10 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-e474a8ad'], (function (workbox) { 'use strict';
+define(['./workbox-b0287fe2'], (function (workbox) { 'use strict';
 
-  self.addEventListener('message', event => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-      self.skipWaiting();
-    }
-  });
+  self.skipWaiting();
+  workbox.clientsClaim();
 
   /**
    * The precacheAndRoute() method efficiently caches and responds to
@@ -81,17 +78,18 @@ define(['./workbox-e474a8ad'], (function (workbox) { 'use strict';
    * See https://goo.gl/S9QRab
    */
   workbox.precacheAndRoute([{
-    "url": "index.html",
-    "revision": "0.4497d6g52mg"
+    "url": "/index.html",
+    "revision": "0.e7euoeu807"
   }], {});
   workbox.cleanupOutdatedCaches();
-  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
-    allowlist: [/^\/$/]
+  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/index.html"), {
+    allowlist: [/^\/$/],
+    denylist: [/^\/api\//]
   }));
-  workbox.registerRoute(/^https:\/\/tile\.openstreetmap\.org\/.*/i, new workbox.CacheFirst({
-    "cacheName": "wanttogo-tiles-v1",
+  workbox.registerRoute(/^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*/i, new workbox.CacheFirst({
+    "cacheName": "wanttogo-tiles-v2",
     plugins: [new workbox.ExpirationPlugin({
-      maxEntries: 500,
+      maxEntries: 1000,
       maxAgeSeconds: 2592000
     }), new workbox.CacheableResponsePlugin({
       statuses: [0, 200]
@@ -99,7 +97,10 @@ define(['./workbox-e474a8ad'], (function (workbox) { 'use strict';
   }), 'GET');
   workbox.registerRoute(/^https:\/\/fonts\.googleapis\.com\/.*/i, new workbox.StaleWhileRevalidate({
     "cacheName": "google-fonts-stylesheets",
-    plugins: []
+    plugins: [new workbox.ExpirationPlugin({
+      maxEntries: 10,
+      maxAgeSeconds: 31536000
+    })]
   }), 'GET');
   workbox.registerRoute(/^https:\/\/fonts\.gstatic\.com\/.*/i, new workbox.CacheFirst({
     "cacheName": "google-fonts-webfonts",
@@ -110,12 +111,38 @@ define(['./workbox-e474a8ad'], (function (workbox) { 'use strict';
       statuses: [0, 200]
     })]
   }), 'GET');
-  workbox.registerRoute(/\/api\/.*/i, new workbox.NetworkFirst({
-    "cacheName": "wanttogo-api-v1",
+  workbox.registerRoute(/\/api\/(places|friends|auth\/me).*/i, new workbox.NetworkFirst({
+    "cacheName": "wanttogo-api-data-v2",
     "networkTimeoutSeconds": 10,
     plugins: [new workbox.ExpirationPlugin({
+      maxEntries: 200,
+      maxAgeSeconds: 86400
+    }), new workbox.CacheableResponsePlugin({
+      statuses: [0, 200]
+    }), new workbox.BackgroundSyncPlugin("wanttogo-api-queue", {
+      maxRetentionTime: 1440
+    })]
+  }), 'GET');
+  workbox.registerRoute(/\/api\/(places|friends|sync).*/i, new workbox.NetworkOnly({
+    plugins: [new workbox.BackgroundSyncPlugin("wanttogo-post-queue", {
+      maxRetentionTime: 1440
+    })]
+  }), 'POST');
+  workbox.registerRoute(/\/api\/(places|friends).*/i, new workbox.NetworkOnly({
+    plugins: [new workbox.BackgroundSyncPlugin("wanttogo-put-queue", {
+      maxRetentionTime: 1440
+    })]
+  }), 'PUT');
+  workbox.registerRoute(/\/api\/(places|friends).*/i, new workbox.NetworkOnly({
+    plugins: [new workbox.BackgroundSyncPlugin("wanttogo-delete-queue", {
+      maxRetentionTime: 1440
+    })]
+  }), 'DELETE');
+  workbox.registerRoute(/\/uploads\/.*/i, new workbox.CacheFirst({
+    "cacheName": "wanttogo-uploads-v1",
+    plugins: [new workbox.ExpirationPlugin({
       maxEntries: 100,
-      maxAgeSeconds: 3600
+      maxAgeSeconds: 2592000
     }), new workbox.CacheableResponsePlugin({
       statuses: [0, 200]
     })]

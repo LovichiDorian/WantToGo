@@ -1,16 +1,8 @@
+import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Map, 
-  Plus, 
-  MapPin, 
-  Users, 
-  Trophy, 
-  User, 
-  Home,
-  Sparkles
-} from 'lucide-react';
+import { MapPin, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { OfflineBanner } from '@/features/offline/components/OfflineBanner';
 import { UpdatePrompt } from '@/features/pwa/components/UpdatePrompt';
@@ -18,17 +10,22 @@ import { useServiceWorker } from '@/features/pwa/hooks/useServiceWorker';
 import { InstallPrompt } from '@/features/pwa/components/InstallPrompt';
 import { useGamification } from '@/features/gamification/context/GamificationContext';
 import { LevelBadge } from '@/components/gamification';
+import { WantToGoBottomNav } from '@/components/Nav';
+import { AIChatPanel } from '@/components/AI';
 
 /**
  * WantToGo 2.0 - Main App Layout
- * Mobile-first with glassmorphism navigation
+ * Mobile-first with glassmorphism navigation and AI chatbot
  */
 export function AppLayout() {
-  const { t } = useTranslation();
+  useTranslation();
   const location = useLocation();
   const { isUpdateAvailable, updateServiceWorker } = useServiceWorker();
   const { profile } = useGamification();
   const stats = profile ? { level: profile.level, xp: profile.xp } : null;
+
+  // AI Chat Panel state
+  const [isAIChatOpen, setIsAIChatOpen] = useState(false);
 
   const isMapPage = location.pathname === '/map';
   const isHomePage = location.pathname === '/';
@@ -42,21 +39,21 @@ export function AppLayout() {
       {/* Floating Header - transparent on map/home */}
       <AnimatePresence>
         {!isFullscreenPage && (
-          <motion.header 
+          <motion.header
             initial={{ y: -60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -60, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className={cn(
               "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-              isHomePage 
-                ? "bg-transparent" 
+              isHomePage
+                ? "bg-transparent"
                 : "glass-strong border-b border-white/10"
             )}
           >
             <div className="flex h-14 items-center justify-between px-4 max-w-screen-xl mx-auto">
               <NavLink to="/" className="flex items-center gap-2.5 group">
-                <motion.div 
+                <motion.div
                   className="flex items-center justify-center w-10 h-10 rounded-2xl gradient-primary shadow-lg glow-sm"
                   whileHover={{ scale: 1.05, rotate: 5 }}
                   whileTap={{ scale: 0.95 }}
@@ -69,7 +66,7 @@ export function AppLayout() {
                   </h1>
                 </div>
               </NavLink>
-              
+
               <div className="flex items-center gap-3">
                 {/* Profile link with level badge */}
                 <NavLink
@@ -91,7 +88,7 @@ export function AppLayout() {
                     </div>
                   )}
                 </NavLink>
-                
+
                 <InstallPrompt />
               </div>
             </div>
@@ -103,11 +100,11 @@ export function AppLayout() {
       {isFullscreenPage && (
         <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
           <div className="flex h-14 items-center justify-between px-4 max-w-screen-xl mx-auto">
-            <NavLink 
-              to="/" 
+            <NavLink
+              to="/"
               className="pointer-events-auto glass-strong rounded-2xl p-2 shadow-lg"
             >
-              <motion.div 
+              <motion.div
                 className="flex items-center justify-center w-8 h-8 rounded-xl gradient-primary"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
@@ -115,7 +112,7 @@ export function AppLayout() {
                 <MapPin className="h-4 w-4 text-white" />
               </motion.div>
             </NavLink>
-            
+
             <NavLink
               to="/profile"
               className="pointer-events-auto glass-strong rounded-2xl p-2 shadow-lg"
@@ -133,115 +130,32 @@ export function AppLayout() {
       )}
 
       {/* Main content */}
-      <main 
+      <main
         className={cn(
           "flex-1",
-          isFullscreenPage 
-            ? "fixed inset-0 top-0 bottom-20" 
+          isFullscreenPage
+            ? "fixed inset-0 top-0 bottom-24"
             : isHomePage
-            ? "pb-20"
-            : "pt-14 pb-20 px-4 max-w-screen-xl mx-auto w-full"
+              ? "pb-28"
+              : "pt-14 pb-28 px-4 max-w-screen-xl mx-auto w-full"
         )}
       >
         <Outlet />
       </main>
 
-      {/* Modern Bottom Navigation - Glassmorphism */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 pb-safe">
-        <div className="mx-3 mb-3 rounded-3xl glass-strong shadow-2xl shadow-black/10 border border-white/20">
-          <div className="flex h-16 items-center justify-between px-1 relative">
-            {/* Left: Home, Map */}
-            <div className="flex items-center gap-1">
-              <NavItem to="/" icon={Home} label={t('nav.home')} />
-              <NavItem to="/map" icon={Map} label={t('nav.map')} />
-            </div>
-            
-            {/* Center: Add button (elevated) */}
-            <div className="relative -mt-8">
-              <NavLink to="/add">
-                <motion.div
-                  className="flex items-center justify-center w-14 h-14 gradient-primary text-white rounded-2xl shadow-lg shadow-primary/40"
-                  whileHover={{ scale: 1.1, y: -4 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Plus className="h-7 w-7" strokeWidth={2.5} />
-                </motion.div>
-              </NavLink>
-              {/* Glow effect */}
-              <div className="absolute inset-0 rounded-2xl gradient-primary opacity-40 blur-xl -z-10" />
-            </div>
+      {/* Modern Bottom Navigation - WantToGo 2026 */}
+      <WantToGoBottomNav
+        onAIClick={() => setIsAIChatOpen(true)}
+      />
 
-            {/* Right: Assistant, Friends, Leaderboard */}
-            <div className="flex items-center gap-1">
-              <NavItem 
-                to="/assistant" 
-                icon={Sparkles} 
-                label={t('nav.assistant')} 
-                accentColor="text-violet-500"
-              />
-              <NavItem to="/friends" icon={Users} label={t('nav.friends')} />
-              <NavItem 
-                to="/leaderboard" 
-                icon={Trophy} 
-                label={t('nav.leaderboard')} 
-                accentColor="text-amber-500"
-              />
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* AI Chat Panel - Slide-up */}
+      <AIChatPanel
+        isOpen={isAIChatOpen}
+        onClose={() => setIsAIChatOpen(false)}
+      />
 
       {/* Offline banner */}
       <OfflineBanner />
     </div>
-  );
-}
-
-// Navigation Item Component
-interface NavItemProps {
-  to: string;
-  icon: React.ElementType;
-  label: string;
-  accentColor?: string;
-}
-
-function NavItem({ to, icon: Icon, label, accentColor }: NavItemProps) {
-  return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        cn(
-          'flex flex-col items-center justify-center gap-0.5 p-1.5 rounded-xl transition-all duration-200',
-          'min-w-[48px]',
-          isActive
-            ? accentColor || 'text-primary'
-            : 'text-muted-foreground hover:text-foreground'
-        )
-      }
-    >
-      {({ isActive }) => (
-        <>
-          <motion.div
-            animate={isActive ? { scale: 1.1 } : { scale: 1 }}
-            transition={{ type: 'spring', stiffness: 400 }}
-          >
-            <Icon className="h-4 w-4" />
-          </motion.div>
-          <span className="text-[9px] font-medium leading-tight">{label}</span>
-          {isActive && (
-            <motion.div
-              layoutId="nav-indicator"
-              className={cn(
-                "absolute bottom-1.5 w-1 h-1 rounded-full",
-                accentColor === "text-violet-500" ? "bg-violet-500" :
-                accentColor === "text-amber-500" ? "bg-amber-500" :
-                "bg-primary"
-              )}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            />
-          )}
-        </>
-      )}
-    </NavLink>
   );
 }

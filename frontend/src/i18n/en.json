@@ -191,15 +191,22 @@
   },
   "settings": {
     "title": "Settings",
+    "tabs": {
+      "appearance": "Appearance",
+      "account": "Account",
+      "privacy": "Privacy"
+    },
     "appearance": "Appearance",
     "appearanceDescription": "Customize the look of the application",
     "theme": "Theme",
     "light": "Light",
     "dark": "Dark",
     "system": "System",
+    "themeChanged": "New style! +50 XP",
     "language": "Language",
     "notifications": "Notifications",
     "notificationsDescription": "Receive sync alerts and reminders",
+    "notificationsBonus": "Notifications enabled → +20% quest XP!",
     "enableNotifications": "Notifications",
     "notificationsEnabled": "Notifications are enabled",
     "notificationsDenied": "Notifications were denied in your browser",
@@ -232,7 +239,11 @@
     "importError": "Error importing file",
     "noPlacesToExport": "No places to export",
     "account": "Account",
-    "version": "Version"
+    "version": "Version",
+    "profileVisibility": "Profile visibility",
+    "mapSharing": "Map sharing",
+    "friendsOnly": "Friends only",
+    "public": "Public"
   },
   "pwa": {
     "install": "Install app",
@@ -306,7 +317,11 @@
     "emailExists": "This email is already in use",
     "registerError": "Error during registration",
     "passwordMismatch": "Passwords don't match",
-    "passwordTooShort": "Password must be at least 6 characters"
+    "passwordTooShort": "Password must be at least 6 characters",
+    "welcomeTitle": "Welcome to WantToGo",
+    "adventureBegins": "Your adventure starts here",
+    "createBucketList": "Create your gamified bucket list",
+    "continueWithEmail": "Continue with email"
   },
   "assistant": {
     "title": "Travel Assistant",
@@ -317,6 +332,23 @@
     "addedToMap": "Added to map",
     "addedFromAssistant": "Added via travel assistant",
     "poweredBy": "Powered by AI"
+  },
+  "aiChat": {
+    "title": "AI Game Master",
+    "placeholder": "Ask me anything about travel...",
+    "thinking": "Finding gems...",
+    "voiceHint": "Voice input coming soon",
+    "surprise": "Surprise me!",
+    "addToMap": "Add to map",
+    "missionAdded": "Mission added! +{{xp}} XP 🎉",
+    "welcome": "Ready to explore?",
+    "welcomeDescription": "Ask me about places, get recommendations, and add them to your map!",
+    "surprisePrompts": {
+      "hidden": "Find me a hidden gem nearby",
+      "romantic": "Suggest a romantic dinner spot",
+      "adventure": "What's an adventurous place to visit?",
+      "cultural": "Recommend a cultural experience"
+    }
   },
   "gamification": {
     "xp": "XP",

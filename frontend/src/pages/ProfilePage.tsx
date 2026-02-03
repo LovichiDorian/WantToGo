@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { 
-  User, 
-  MapPin, 
-  CheckCircle2, 
-  Camera, 
-  Users, 
-  Globe, 
+import { Link } from 'react-router-dom';
+import {
+  User,
+  MapPin,
+  CheckCircle2,
+  Camera,
+  Users,
+  Globe,
   Building2,
   Trophy,
   Lock,
   ChevronRight,
-  Loader2
+  Loader2,
+  Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/AuthContext';
@@ -34,10 +36,10 @@ export function ProfilePage() {
   useEffect(() => {
     refreshProfile();
     refreshAchievements();
-    
+
     // Load stats
-    leaderboardAPI.getTotalDistance().then(r => setTotalDistance(r.totalDistanceKm)).catch(() => {});
-    leaderboardAPI.getTopCities().then(setTopCities).catch(() => {});
+    leaderboardAPI.getTotalDistance().then(r => setTotalDistance(r.totalDistanceKm)).catch(() => { });
+    leaderboardAPI.getTopCities().then(setTopCities).catch(() => { });
   }, [refreshProfile, refreshAchievements]);
 
   if (isLoading || !profile) {
@@ -58,7 +60,7 @@ export function ProfilePage() {
         {/* Background decoration */}
         <div className="absolute inset-0 bg-[url('/patterns/topography.svg')] opacity-10" />
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        
+
         <div className="relative z-10">
           {/* User Info */}
           <div className="flex items-center gap-4 mb-6">
@@ -70,7 +72,7 @@ export function ProfilePage() {
                 <LevelBadge level={profile.level} size="sm" showGlow />
               </div>
             </div>
-            <div>
+            <div className="flex-1">
               <h1 className="text-2xl font-bold">
                 {profile.name || user?.email.split('@')[0]}
               </h1>
@@ -83,6 +85,13 @@ export function ProfilePage() {
                 })}
               </p>
             </div>
+            {/* Settings Button */}
+            <Link
+              to="/settings"
+              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
+            >
+              <Settings className="w-5 h-5" />
+            </Link>
           </div>
 
           {/* XP Progress */}

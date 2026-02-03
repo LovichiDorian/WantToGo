@@ -191,15 +191,22 @@
   },
   "settings": {
     "title": "Paramètres",
+    "tabs": {
+      "appearance": "Apparence",
+      "account": "Compte",
+      "privacy": "Confidentialité"
+    },
     "appearance": "Apparence",
     "appearanceDescription": "Personnalisez l'apparence de l'application",
     "theme": "Thème",
     "light": "Clair",
     "dark": "Sombre",
     "system": "Système",
+    "themeChanged": "Nouveau style ! +50 XP",
     "language": "Langue",
     "notifications": "Notifications",
     "notificationsDescription": "Recevez des alertes de synchronisation et rappels",
+    "notificationsBonus": "Notifications activées → +20% XP quêtes !",
     "enableNotifications": "Notifications",
     "notificationsEnabled": "Les notifications sont activées",
     "notificationsDenied": "Les notifications ont été refusées dans votre navigateur",
@@ -232,7 +239,11 @@
     "importError": "Erreur lors de l'import du fichier",
     "noPlacesToExport": "Aucun lieu à exporter",
     "account": "Compte",
-    "version": "Version"
+    "version": "Version",
+    "profileVisibility": "Visibilité du profil",
+    "mapSharing": "Partage de carte",
+    "friendsOnly": "Amis uniquement",
+    "public": "Public"
   },
   "pwa": {
     "install": "Installer l'app",
@@ -306,7 +317,11 @@
     "emailExists": "Cet email est déjà utilisé",
     "registerError": "Erreur lors de l'inscription",
     "passwordMismatch": "Les mots de passe ne correspondent pas",
-    "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères"
+    "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères",
+    "welcomeTitle": "Bienvenue sur WantToGo",
+    "adventureBegins": "Ton aventure commence ici",
+    "createBucketList": "Crée ta bucket list gamifiée",
+    "continueWithEmail": "Continuer avec email"
   },
   "assistant": {
     "title": "Assistant voyage",
@@ -317,6 +332,23 @@
     "addedToMap": "Ajouté à la carte",
     "addedFromAssistant": "Ajouté via l'assistant voyage",
     "poweredBy": "Propulsé par IA"
+  },
+  "aiChat": {
+    "title": "Game Master IA",
+    "placeholder": "Demande-moi n'importe quoi sur les voyages...",
+    "thinking": "Je cherche les pépites...",
+    "voiceHint": "Saisie vocale bientôt disponible",
+    "surprise": "Surprends-moi !",
+    "addToMap": "Ajouter à ma carte",
+    "missionAdded": "Mission ajoutée ! +{{xp}} XP 🎉",
+    "welcome": "Prêt à explorer ?",
+    "welcomeDescription": "Demande-moi des lieux, obtiens des recommandations et ajoute-les à ta carte !",
+    "surprisePrompts": {
+      "hidden": "Trouve-moi une pépite cachée près d'ici",
+      "romantic": "Suggère-moi un resto romantique",
+      "adventure": "Quel endroit aventureux visiter ?",
+      "cultural": "Recommande-moi une expérience culturelle"
+    }
   },
   "gamification": {
     "xp": "XP",
