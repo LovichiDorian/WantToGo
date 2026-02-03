@@ -4,7 +4,7 @@ import { getStoredToken } from './auth';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 
   (window.location.hostname === 'localhost' 
     ? 'http://localhost:3010/api' 
-    : `${window.location.protocol}//${window.location.hostname}:3010/api`);
+    : '/api'); // Use relative path - nginx proxies /api to backend
 
 interface RequestOptions extends RequestInit {
   timeout?: number;

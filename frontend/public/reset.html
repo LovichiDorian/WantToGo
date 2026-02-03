@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset WantToGo</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        h1 { color: #4cc9f0; }
+        button {
+            background: #4cc9f0;
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+        }
+        button:hover { background: #7dd3fc; }
+        .log {
+            background: #16213e;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+        .info { color: #fbbf24; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Reset WantToGo</h1>
+    <p>Cette page permet de réinitialiser complètement l'application.</p>
+    
+    <button onclick="resetAll()">🗑️ Tout Réinitialiser</button>
+    <button onclick="checkStatus()">🔍 Vérifier le statut</button>
+    <button onclick="window.location.href='/'">🏠 Retour à l'app</button>
+    
+    <div class="log" id="log"></div>
+
+    <script>
+        const log = document.getElementById('log');
+        
+        function addLog(message, type = '') {
+            const p = document.createElement('p');
+            p.className = type;
+            p.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(p);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function checkStatus() {
+            log.innerHTML = '';
+            addLog('Vérification du statut...', 'info');
+            
+            // Check SW
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                addLog(`Service Workers enregistrés: ${registrations.length}`, registrations.length > 0 ? 'success' : 'info');
+                for (const reg of registrations) {
+                    addLog(`  - Scope: ${reg.scope}`, 'info');
+                    addLog(`    Active: ${reg.active?.state || 'none'}`, 'info');
+                }
+            }
+            
+            // Check caches
+            if ('caches' in window) {
+                const cacheNames = await caches.keys();
+                addLog(`Caches: ${cacheNames.length}`, cacheNames.length > 0 ? 'info' : 'success');
+                for (const name of cacheNames) {
+                    addLog(`  - ${name}`, 'info');
+                }
+            }
+            
+            // Check IndexedDB
+            if ('indexedDB' in window) {
+                const databases = await indexedDB.databases();
+                addLog(`IndexedDB: ${databases.length}`, databases.length > 0 ? 'info' : 'success');
+                for (const db of databases) {
+                    addLog(`  - ${db.name} (v${db.version})`, 'info');
+                }
+            }
+            
+            // Check localStorage
+            addLog(`LocalStorage: ${localStorage.length} items`, 'info');
+            
+            addLog('Vérification terminée.', 'success');
+        }
+
+        async function resetAll() {
+            log.innerHTML = '';
+            addLog('Début de la réinitialisation...', 'info');
+            
+            try {
+                // 1. Unregister all service workers
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    addLog(`Désinscription de ${registrations.length} Service Workers...`, 'info');
+                    for (const registration of registrations) {
+                        await registration.unregister();
+                        addLog(`  - Service Worker désinscrit`, 'success');
+                    }
+                }
+                
+                // 2. Clear all caches
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    addLog(`Suppression de ${cacheNames.length} caches...`, 'info');
+                    for (const cacheName of cacheNames) {
+                        await caches.delete(cacheName);
+                        addLog(`  - Cache ${cacheName} supprimé`, 'success');
+                    }
+                }
+                
+                // 3. Clear IndexedDB
+                if ('indexedDB' in window) {
+                    const databases = await indexedDB.databases();
+                    addLog(`Suppression de ${databases.length} bases IndexedDB...`, 'info');
+                    for (const db of databases) {
+                        if (db.name) {
+                            indexedDB.deleteDatabase(db.name);
+                            addLog(`  - Base ${db.name} supprimée`, 'success');
+                        }
+                    }
+                }
+                
+                // 4. Clear localStorage
+                addLog('Nettoyage du localStorage...', 'info');
+                localStorage.clear();
+                addLog('  - localStorage vidé', 'success');
+                
+                // 5. Clear sessionStorage
+                addLog('Nettoyage du sessionStorage...', 'info');
+                sessionStorage.clear();
+                addLog('  - sessionStorage vidé', 'success');
+                
+                addLog('✅ Réinitialisation complète!', 'success');
+                addLog('Rechargement dans 2 secondes...', 'info');
+                
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+                
+            } catch (error) {
+                addLog(`Erreur: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-check on load
+        checkStatus();
+    </script>
+</body>
+</html>

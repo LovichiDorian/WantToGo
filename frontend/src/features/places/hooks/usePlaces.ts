@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Place } from '@/lib/types';
 import * as placesDB from '@/lib/db/places';
 import { addToSyncQueue } from '@/lib/db/syncQueue';
-import { fetchPlaces } from '@/lib/api/places';
+import { fetchPlaces, createPlace as createPlaceAPI } from '@/lib/api/places';
 import { useOnlineStatus } from '@/features/offline/hooks/useOnlineStatus';
 
 interface UsePlacesReturn {
@@ -63,7 +63,33 @@ export function usePlaces(): UsePlacesReturn {
   // Create a new place
   const createPlace = useCallback(
     async (placeData: Omit<Place, 'id' | 'photos' | 'createdAt' | 'updatedAt' | 'syncStatus'>): Promise<Place> => {
-      // Save to IndexedDB first (optimistic)
+      // Always try to create on server first (don't rely on navigator.onLine)
+      try {
+        // Create on server first
+        const serverPlace = await createPlaceAPI(placeData);
+        
+        // Transform to local format with synced status
+        const localPlace: Place = {
+          ...serverPlace,
+          id: serverPlace.id,
+          serverId: serverPlace.id,
+          photos: serverPlace.photos || [],
+          syncStatus: 'synced',
+        };
+        
+        // Save to IndexedDB
+        await placesDB.savePlace(localPlace);
+        
+        // Update local state
+        setPlaces((prev) => [localPlace, ...prev]);
+        
+        return localPlace;
+      } catch (error) {
+        console.warn('Failed to create on server, saving offline:', error);
+        // Fall through to offline mode
+      }
+      
+      // Offline mode: Save to IndexedDB first (optimistic)
       const newPlace = await placesDB.savePlace(placeData);
       
       // Add to sync queue

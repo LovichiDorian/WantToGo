@@ -224,3 +224,36 @@
   @apply bg-background/80 backdrop-blur-xl border border-border/50;
 }
 
+/* Friend marker styling */
+.friend-marker {
+  background: transparent;
+  border: none;
+}
+
+/* Better mobile spacing for cards */
+@media (max-width: 390px) {
+  /* iPhone SE/Mini */
+  .place-card-mobile {
+    padding: 0.875rem;
+  }
+  
+  .friend-code-display {
+    font-size: 1.125rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* Safe area for iPhones with notch */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .header-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Improved touch feedback */
+.touch-scale {
+  transition: transform 0.15s ease-out;
+}
+.touch-scale:active {
+  transform: scale(0.97);
+}

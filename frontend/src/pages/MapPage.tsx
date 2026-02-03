@@ -169,36 +169,36 @@ function PlaceCard({
 
   return (
     <div 
-      className="absolute left-4 right-20 bottom-28 z-[1000] animate-in slide-in-from-bottom-4 duration-300"
+      className="absolute left-3 right-3 sm:left-4 sm:right-20 bottom-24 sm:bottom-28 z-[1000] animate-in slide-in-from-bottom-4 duration-300"
       onClick={onViewDetails}
     >
-      <div className={`bg-background/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border/50 p-4 ${onViewDetails ? 'cursor-pointer hover:bg-background' : ''} transition-colors`}>
+      <div className={`bg-background/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border/50 p-3 sm:p-4 ${onViewDetails ? 'cursor-pointer hover:bg-background active:scale-[0.98]' : ''} transition-all`}>
         <div className="flex items-start gap-3">
           <div 
-            className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
+            className="flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center"
             style={{ 
               background: friendColor 
                 ? `linear-gradient(135deg, ${friendColor}30, ${friendColor}15)` 
                 : 'linear-gradient(135deg, var(--primary) / 0.2, var(--primary) / 0.1)' 
             }}
           >
-            <MapPin className="h-5 w-5" style={{ color: friendColor || 'var(--primary)' }} />
+            <MapPin className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: friendColor || 'var(--primary)' }} />
           </div>
           <div className="flex-1 min-w-0">
             {friendName && (
-              <p className="text-xs font-medium mb-1" style={{ color: friendColor }}>
+              <p className="text-xs font-medium mb-0.5" style={{ color: friendColor }}>
                 {friendName}
               </p>
             )}
-            <h3 className="font-semibold text-foreground truncate">{place.name}</h3>
+            <h3 className="font-semibold text-foreground truncate text-sm sm:text-base">{place.name}</h3>
             {place.address && (
-              <p className="text-sm text-muted-foreground truncate mt-0.5">{place.address}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate mt-0.5">{place.address}</p>
             )}
             {place.notes && (
-              <p className="text-sm text-muted-foreground/70 line-clamp-1 mt-1">{place.notes}</p>
+              <p className="text-xs text-muted-foreground/70 line-clamp-1 mt-1 hidden sm:block">{place.notes}</p>
             )}
           </div>
-          {onViewDetails && <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />}
+          {onViewDetails && <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />}
         </div>
       </div>
     </div>
@@ -362,6 +362,13 @@ export function MapPage() {
           place={selectedItem.place}
           friendName={selectedItem.friend.name}
           friendColor={selectedItem.friend.color}
+          onViewDetails={() => navigate(`/friend/${selectedItem.friend.id}/place/${selectedItem.place.id}`, {
+            state: {
+              place: selectedItem.place,
+              friendName: selectedItem.friend.name,
+              friendColor: selectedItem.friend.color
+            }
+          })}
         />
       )}
     </div>

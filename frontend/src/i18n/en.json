@@ -140,7 +140,8 @@
     "friendAdded": "{{name}} added with {{count}} place(s)",
     "friendAddedDescription": "Their places now appear on your map",
     "codeNotFound": "Invalid code or friend not found",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "placeFrom": "Shared by {{name}}"
   },
   "auth": {
     "login": "Log in",

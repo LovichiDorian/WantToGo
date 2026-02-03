@@ -92,3 +92,20 @@ export function closeDB(): void {
     dbInstance = null;
   }
 }
+
+/**
+ * Clear all data from IndexedDB (used on logout)
+ */
+export async function clearAllData(): Promise<void> {
+  const db = await getDB();
+  
+  // Clear all stores
+  const tx = db.transaction(['places', 'photos', 'syncQueue', 'friends'], 'readwrite');
+  await Promise.all([
+    tx.objectStore('places').clear(),
+    tx.objectStore('photos').clear(),
+    tx.objectStore('syncQueue').clear(),
+    tx.objectStore('friends').clear(),
+    tx.done,
+  ]);
+}

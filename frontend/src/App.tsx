@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppLayout } from '@/layouts/AppLayout';
 import { PlacesListPage } from '@/pages/PlacesListPage';
 import { PlaceDetailPage } from '@/pages/PlaceDetailPage';
+import { FriendPlaceDetailPage } from '@/pages/FriendPlaceDetailPage';
 import { PlaceFormPage } from '@/pages/PlaceFormPage';
 import { MapPage } from '@/pages/MapPage';
 import { SettingsPage } from '@/pages/SettingsPage';
@@ -64,6 +65,7 @@ function AppRoutes() {
         <Route path="map" element={<MapPage />} />
         <Route path="places" element={<PlacesListPage />} />
         <Route path="place/:id" element={<PlaceDetailPage />} />
+        <Route path="friend/:friendId/place/:placeId" element={<FriendPlaceDetailPage />} />
         <Route path="add" element={<PlaceFormPage />} />
         <Route path="edit/:id" element={<PlaceFormPage />} />
         <Route path="friends" element={<FriendsPage />} />

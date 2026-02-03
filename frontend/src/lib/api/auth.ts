@@ -1,4 +1,5 @@
 import { apiRequest } from './client';
+import { clearAllData } from '../db';
 
 export interface User {
   id: string;
@@ -76,6 +77,8 @@ export async function getMe(): Promise<User> {
   });
 }
 
-export function logout(): void {
+export async function logout(): Promise<void> {
   clearAuth();
+  // Vider les données locales (IndexedDB) pour éviter les fuites de données entre comptes
+  await clearAllData();
 }
