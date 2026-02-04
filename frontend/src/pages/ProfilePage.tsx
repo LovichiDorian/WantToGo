@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
-  User,
   MapPin,
   CheckCircle2,
   Camera,
@@ -13,7 +12,8 @@ import {
   Lock,
   ChevronRight,
   Loader2,
-  Settings
+  Settings,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/AuthContext';
@@ -24,6 +24,7 @@ import { AchievementCard } from '@/features/gamification/components/AchievementC
 import { PremiumBanner } from '@/features/premium/components/PremiumBanner';
 import * as leaderboardAPI from '@/lib/api/leaderboard';
 import { cn } from '@/lib/utils';
+import { ChibiCharacter, DEFAULT_CHARACTER } from '@/components/avatar';
 
 export function ProfilePage() {
   const { t, i18n } = useTranslation();
@@ -62,14 +63,21 @@ export function ProfilePage() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
         <div className="relative z-10">
-          {/* User Info */}
+          {/* User Info with Chibi Character */}
           <div className="flex items-center gap-4 mb-6">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <User className="w-8 h-8" />
-              </div>
+              {/* Chibi Character */}
+              <Link to="/settings/avatar-studio" className="block">
+                <div className="w-20 h-24 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors cursor-pointer p-1">
+                  <ChibiCharacter
+                    config={DEFAULT_CHARACTER}
+                    size="sm"
+                    animated={false}
+                  />
+                </div>
+              </Link>
               <div className="absolute -bottom-1 -right-1">
-                <LevelBadge level={profile.level} size="sm" showGlow />
+                <LevelBadge level={profile.level} size="sm" />
               </div>
             </div>
             <div className="flex-1">
@@ -84,6 +92,14 @@ export function ProfilePage() {
                   ),
                 })}
               </p>
+              {/* Customize button */}
+              <Link
+                to="/settings/avatar-studio"
+                className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors text-sm font-medium"
+              >
+                <Sparkles className="w-4 h-4" />
+                {isEnglish ? 'Customize my character' : 'Personnaliser'}
+              </Link>
             </div>
             {/* Settings Button */}
             <Link

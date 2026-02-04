@@ -1,172 +1,111 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowLeft,
-    Sparkles,
-    Palette,
-    Crown,
-    Image,
-    Wand2,
     Save,
-    Check
+    Sparkles,
+    User,
+    Shirt,
+    Backpack,
+    Check,
+    Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/features/auth/AuthContext';
 import { cn } from '@/lib/utils';
-import {
-    LiveAvatarPreview,
-    BaseStyleGrid,
-    ColorStudio,
-    AccessoryPicker,
-    BackgroundPicker,
-    AnimationPreview,
-} from '@/components/avatars/studio';
-import {
-    type AvatarData,
-    DEFAULT_AVATAR,
-    AVATAR_STUDIO_CONFIG
-} from '@/components/avatars/avatarConstants';
+import { useAuth } from '@/features/auth/AuthContext';
+import { useGamification } from '@/features/gamification/context/GamificationContext';
 
-type StudioTab = 'base' | 'colors' | 'accessories' | 'backgrounds' | 'animations';
+// Chibi character components
+import { ChibiCharacter } from '@/components/avatar/ChibiCharacter';
+import {
+    GenderSkinPicker,
+    OutfitGrid,
+    AccessoryGrid
+} from '@/components/avatar/studio';
+import {
+    DEFAULT_CHARACTER,
+    type CharacterConfig,
+    type CharacterGender
+} from '@/components/avatar/characterConstants';
 
-const TABS: { id: StudioTab; icon: typeof Sparkles; labelKey: string; emoji: string }[] = [
-    { id: 'base', icon: Crown, labelKey: 'avatarStudio.tabs.base', emoji: '👤' },
-    { id: 'colors', icon: Palette, labelKey: 'avatarStudio.tabs.colors', emoji: '🎨' },
-    { id: 'accessories', icon: Sparkles, labelKey: 'avatarStudio.tabs.accessories', emoji: '✨' },
-    { id: 'backgrounds', icon: Image, labelKey: 'avatarStudio.tabs.backgrounds', emoji: '🖼️' },
-    { id: 'animations', icon: Wand2, labelKey: 'avatarStudio.tabs.animations', emoji: '🎬' },
+type TabId = 'base' | 'outfits' | 'accessories';
+
+const TABS: { id: TabId; icon: React.ElementType; label: string }[] = [
+    { id: 'base', icon: User, label: 'Base' },
+    { id: 'outfits', icon: Shirt, label: 'Tenues' },
+    { id: 'accessories', icon: Backpack, label: 'Accessoires' },
 ];
 
 /**
- * AvatarStudio - Full screen avatar customization page
- * 5 tabs: Base, Colors, Accessories, Backgrounds, Animations
+ * AvatarStudio - Chibi character customization page
  */
 export function AvatarStudio() {
-    const { t } = useTranslation();
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { profile } = useGamification();
 
-    const [activeTab, setActiveTab] = useState<StudioTab>('base');
+    const [activeTab, setActiveTab] = useState<TabId>('base');
     const [isSaving, setIsSaving] = useState(false);
-    const [saveSuccess, setSaveSuccess] = useState(false);
+    const [saved, setSaved] = useState(false);
 
-    // Avatar state
-    const [avatar, setAvatar] = useState<AvatarData>({
-        base: user?.avatarBase || DEFAULT_AVATAR.base,
-        color: user?.avatarColor || DEFAULT_AVATAR.color,
-        secondaryColor: null,
-        customHex: null,
-        accessory: user?.avatarAccessory || DEFAULT_AVATAR.accessory,
-        background: user?.avatarBackground || DEFAULT_AVATAR.background,
-        animation: user?.avatarAnimation || DEFAULT_AVATAR.animation,
-    });
+    // Character configuration state
+    const [config, setConfig] = useState<CharacterConfig>(DEFAULT_CHARACTER);
 
-    const userLevel = user?.level || 1;
-    const monthlyChangesLeft = 5; // TODO: Track from backend
+    // User level for unlocking
+    const userLevel = profile?.level || 1;
 
-    // Handle save
+    // Load user's saved character on mount
+    useEffect(() => {
+        if (user) {
+            // TODO: Load from user profile/API
+            // For now, use defaults
+        }
+    }, [user]);
+
+    // Handlers
+    const handleGenderChange = (gender: CharacterGender) => {
+        setConfig(prev => ({ ...prev, gender }));
+        setSaved(false);
+    };
+
+    const handleSkinToneChange = (skinTone: string) => {
+        setConfig(prev => ({ ...prev, skinTone }));
+        setSaved(false);
+    };
+
+    const handleOutfitChange = (outfit: string) => {
+        setConfig(prev => ({ ...prev, outfit }));
+        setSaved(false);
+    };
+
+    const handleAccessoryToggle = (accessoryId: string) => {
+        setConfig(prev => {
+            const accessories = prev.accessories.includes(accessoryId)
+                ? prev.accessories.filter(id => id !== accessoryId)
+                : [...prev.accessories, accessoryId];
+            return { ...prev, accessories };
+        });
+        setSaved(false);
+    };
+
     const handleSave = async () => {
         setIsSaving(true);
-        try {
-            // TODO: API call to save avatar
-            // await updateUserAvatar(avatar);
-
-            // Simulate save
-            await new Promise(resolve => setTimeout(resolve, 800));
-
-            setSaveSuccess(true);
-            setTimeout(() => {
-                setSaveSuccess(false);
-                navigate(-1);
-            }, 1500);
-        } catch (error) {
-            console.error('Failed to save avatar:', error);
-        } finally {
-            setIsSaving(false);
-        }
-    };
-
-    // Update handlers
-    const updateBase = (baseId: string) => {
-        setAvatar(prev => ({ ...prev, base: baseId }));
-    };
-
-    const updateColors = (primary: string, secondary?: string | null) => {
-        setAvatar(prev => ({ ...prev, color: primary, secondaryColor: secondary }));
-    };
-
-    const updateCustomHex = (hex: string | null) => {
-        setAvatar(prev => ({ ...prev, customHex: hex }));
-    };
-
-    const updateAccessory = (accessoryId: string | null) => {
-        setAvatar(prev => ({ ...prev, accessory: accessoryId }));
-    };
-
-    const updateBackground = (backgroundId: string | null) => {
-        setAvatar(prev => ({ ...prev, background: backgroundId }));
-    };
-
-    const updateAnimation = (animationId: string | null) => {
-        setAvatar(prev => ({ ...prev, animation: animationId }));
-    };
-
-    const renderTabContent = () => {
-        switch (activeTab) {
-            case 'base':
-                return (
-                    <BaseStyleGrid
-                        selectedBase={avatar.base}
-                        userLevel={userLevel}
-                        color={avatar.color}
-                        onSelect={updateBase}
-                    />
-                );
-            case 'colors':
-                return (
-                    <ColorStudio
-                        selectedColor={avatar.color}
-                        selectedSecondaryColor={avatar.secondaryColor}
-                        customHex={avatar.customHex}
-                        userLevel={userLevel}
-                        onColorChange={updateColors}
-                        onCustomHexChange={updateCustomHex}
-                    />
-                );
-            case 'accessories':
-                return (
-                    <AccessoryPicker
-                        selectedAccessory={avatar.accessory || null}
-                        userLevel={userLevel}
-                        onSelect={updateAccessory}
-                    />
-                );
-            case 'backgrounds':
-                return (
-                    <BackgroundPicker
-                        selectedBackground={avatar.background || null}
-                        userLevel={userLevel}
-                        onSelect={updateBackground}
-                    />
-                );
-            case 'animations':
-                return (
-                    <AnimationPreview
-                        selectedAnimation={avatar.animation || null}
-                        userLevel={userLevel}
-                        onSelect={updateAnimation}
-                    />
-                );
-        }
+        // TODO: API call to save character config
+        await new Promise(resolve => setTimeout(resolve, 800));
+        setSaved(true);
+        setIsSaving(false);
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
-            {/* Header */}
-            <div className="sticky top-0 z-20 glass-light backdrop-blur-xl border-b border-white/20 dark:border-white/5">
-                <div className="flex items-center justify-between p-4">
+        <div className="min-h-screen bg-background">
+            {/* Fixed Header */}
+            <motion.header
+                className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50"
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+            >
+                <div className="flex items-center justify-between px-4 py-3">
                     <Button
                         variant="ghost"
                         size="icon"
@@ -175,141 +114,153 @@ export function AvatarStudio() {
                     >
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
-                    <h1 className="text-lg font-bold">
-                        {t('avatarStudio.title', 'Studio Avatar')}
-                    </h1>
-                    <div className="w-10" /> {/* Spacer */}
+
+                    <div className="text-center">
+                        <h1 className="font-bold text-lg">Mon Personnage</h1>
+                        <p className="text-xs text-muted-foreground">Personnalise ton avatar</p>
+                    </div>
+
+                    <Button
+                        variant={saved ? "outline" : "default"}
+                        size="sm"
+                        onClick={handleSave}
+                        disabled={isSaving || saved}
+                        className="rounded-xl gap-1.5"
+                    >
+                        {isSaving ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : saved ? (
+                            <Check className="h-4 w-4" />
+                        ) : (
+                            <Save className="h-4 w-4" />
+                        )}
+                        {isSaving ? 'Sauvegarde...' : saved ? 'Sauvegardé' : 'Sauvegarder'}
+                    </Button>
                 </div>
-            </div>
+            </motion.header>
 
-            {/* Preview Section (40%) */}
-            <div className="relative py-8 px-6">
-                {/* Background glow */}
-                <div
-                    className="absolute inset-0 opacity-30"
-                    style={{
-                        background: `radial-gradient(circle at 50% 50%, ${avatar.color}40 0%, transparent 70%)`,
-                    }}
-                />
-
-                <motion.div
-                    className="relative flex flex-col items-center"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+            {/* Content with padding for header */}
+            <div className="pt-20 pb-32">
+                {/* Character Preview Hero */}
+                <motion.section
+                    className="relative py-8 px-4 overflow-hidden"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                 >
-                    <LiveAvatarPreview
-                        avatar={avatar}
-                        size="xl"
-                        animate={true}
+                    {/* Gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-primary/10 to-transparent" />
+
+                    {/* Glow effect */}
+                    <div
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-3xl opacity-30"
+                        style={{ backgroundColor: '#3B82F6' }}
                     />
 
-                    <motion.div
-                        className="mt-6 text-center"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                    >
-                        <p className="text-sm text-muted-foreground">
-                            Niveau {userLevel}
-                        </p>
-                    </motion.div>
-                </motion.div>
-            </div>
+                    {/* Character */}
+                    <div className="relative flex flex-col items-center">
+                        <motion.div
+                            key={`${config.gender}-${config.skinTone}-${config.outfit}`}
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                        >
+                            <ChibiCharacter
+                                config={config}
+                                size="xl"
+                                animated
+                            />
+                        </motion.div>
 
-            {/* Tab Navigation */}
-            <div className="sticky top-[73px] z-10 px-4 pb-4">
-                <div className="flex gap-1.5 p-1.5 bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-white/5 shadow-lg overflow-x-auto scrollbar-hide">
-                    {TABS.map((tab) => {
-                        const isActive = activeTab === tab.id;
-                        return (
+                        {/* Level badge */}
+                        <motion.div
+                            className="mt-4 flex items-center gap-2 bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            <Sparkles className="h-4 w-4 text-primary" />
+                            <span className="text-sm font-medium">Niveau {userLevel}</span>
+                        </motion.div>
+                    </div>
+                </motion.section>
+
+                {/* Tab Navigation */}
+                <div className="px-4 mb-4">
+                    <div className="flex gap-2 bg-muted/30 backdrop-blur-sm rounded-2xl p-1.5">
+                        {TABS.map(tab => (
                             <motion.button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={cn(
-                                    'flex-1 min-w-[60px] flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl text-xs font-medium',
+                                    'flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl',
                                     'transition-all duration-200',
-                                    isActive
-                                        ? 'bg-primary text-white shadow-lg'
-                                        : 'text-muted-foreground hover:bg-white/50 dark:hover:bg-gray-700/50'
+                                    activeTab === tab.id
+                                        ? 'bg-background shadow-md text-primary'
+                                        : 'text-muted-foreground hover:text-foreground'
                                 )}
-                                whileTap={{ scale: 0.95 }}
+                                whileTap={{ scale: 0.98 }}
                             >
-                                <span className="text-base">{tab.emoji}</span>
-                                <span className="hidden sm:block">
-                                    {t(tab.labelKey, tab.id)}
-                                </span>
+                                <tab.icon className="h-4 w-4" />
+                                <span className="text-sm font-medium">{tab.label}</span>
                             </motion.button>
-                        );
-                    })}
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            {/* Tab Content */}
-            <div className="px-4 pb-32">
-                <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-white/5 shadow-lg p-4">
+                {/* Tab Content */}
+                <div className="px-4">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
+                            className="bg-card/50 backdrop-blur-sm rounded-3xl border border-border/50 p-4"
                         >
-                            {renderTabContent()}
+                            {activeTab === 'base' && (
+                                <GenderSkinPicker
+                                    selectedGender={config.gender}
+                                    selectedSkinTone={config.skinTone}
+                                    onGenderChange={handleGenderChange}
+                                    onSkinToneChange={handleSkinToneChange}
+                                />
+                            )}
+
+                            {activeTab === 'outfits' && (
+                                <OutfitGrid
+                                    selectedOutfit={config.outfit}
+                                    userLevel={userLevel}
+                                    onSelect={handleOutfitChange}
+                                />
+                            )}
+
+                            {activeTab === 'accessories' && (
+                                <AccessoryGrid
+                                    selectedAccessories={config.accessories}
+                                    userLevel={userLevel}
+                                    onToggle={handleAccessoryToggle}
+                                />
+                            )}
                         </motion.div>
                     </AnimatePresence>
                 </div>
             </div>
 
-            {/* Fixed Bottom Action Bar */}
-            <div className="fixed bottom-0 left-0 right-0 z-30 p-4 pb-safe bg-gradient-to-t from-white via-white to-transparent dark:from-gray-900 dark:via-gray-900">
-                <div className="max-w-lg mx-auto space-y-2">
-                    <motion.button
-                        onClick={handleSave}
-                        disabled={isSaving || saveSuccess}
-                        className={cn(
-                            'w-full py-4 px-6 rounded-2xl font-bold text-lg',
-                            'flex items-center justify-center gap-3',
-                            'transition-all duration-300',
-                            'shadow-xl',
-                            saveSuccess
-                                ? 'bg-green-500 text-white'
-                                : 'gradient-primary text-white hover:shadow-2xl'
-                        )}
-                        whileHover={!isSaving && !saveSuccess ? { scale: 1.02 } : undefined}
-                        whileTap={!isSaving && !saveSuccess ? { scale: 0.98 } : undefined}
-                    >
-                        {isSaving ? (
-                            <>
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                                >
-                                    <Sparkles className="h-5 w-5" />
-                                </motion.div>
-                                <span>Sauvegarde...</span>
-                            </>
-                        ) : saveSuccess ? (
-                            <>
-                                <Check className="h-5 w-5" />
-                                <span>Sauvegardé ! +{AVATAR_STUDIO_CONFIG.saveXpReward} XP</span>
-                            </>
-                        ) : (
-                            <>
-                                <Save className="h-5 w-5" />
-                                <span>💾 Sauvegarder</span>
-                                <span className="text-white/80 text-sm">
-                                    +{AVATAR_STUDIO_CONFIG.saveXpReward} XP
-                                </span>
-                            </>
-                        )}
-                    </motion.button>
-
-                    <p className="text-xs text-center text-muted-foreground">
-                        Visible par tes amis • {monthlyChangesLeft}/{AVATAR_STUDIO_CONFIG.maxMonthlyChanges} changements ce mois
-                    </p>
+            {/* XP Reward Indicator */}
+            <motion.div
+                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+            >
+                <div className="bg-gradient-to-r from-amber-500/90 to-orange-500/90 backdrop-blur-sm rounded-full px-5 py-2.5 shadow-xl flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-white" />
+                    <span className="text-sm font-bold text-white">
+                        Sauvegarde = +100 XP
+                    </span>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 }

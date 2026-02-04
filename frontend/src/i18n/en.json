@@ -703,5 +703,35 @@
     "rainbow": "Rainbow",
     "fire": "Fire",
     "legendary": "Legendary"
+  },
+  "character": {
+    "title": "My Character",
+    "subtitle": "Customize your avatar",
+    "customize": "Customize",
+    "customizeButton": "Customize my character",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "saveReward": "Save = +100 XP",
+    "base": "Base",
+    "outfits": "Outfits",
+    "accessories": "Accessories",
+    "gender": {
+      "title": "Silhouette",
+      "male": "Male",
+      "female": "Female",
+      "neutral": "Neutral"
+    },
+    "skinTone": {
+      "title": "Skin Tone"
+    },
+    "outfit": {
+      "unlocked": "outfits unlocked",
+      "levelRequired": "Lvl."
+    },
+    "accessory": {
+      "unlocked": "accessories",
+      "equipped": "equipped"
+    }
   }
 }

@@ -703,5 +703,35 @@
     "rainbow": "Arc-en-ciel",
     "fire": "Feu",
     "legendary": "Légendaire"
+  },
+  "character": {
+    "title": "Mon Personnage",
+    "subtitle": "Personnalise ton avatar",
+    "customize": "Personnaliser",
+    "customizeButton": "Personnaliser mon personnage",
+    "save": "Sauvegarder",
+    "saving": "Sauvegarde...",
+    "saved": "Sauvegardé",
+    "saveReward": "Sauvegarde = +100 XP",
+    "base": "Base",
+    "outfits": "Tenues",
+    "accessories": "Accessoires",
+    "gender": {
+      "title": "Silhouette",
+      "male": "Masculin",
+      "female": "Féminin",
+      "neutral": "Neutre"
+    },
+    "skinTone": {
+      "title": "Couleur de peau"
+    },
+    "outfit": {
+      "unlocked": "tenues débloquées",
+      "levelRequired": "Niv."
+    },
+    "accessory": {
+      "unlocked": "accessoires",
+      "equipped": "équipé(s)"
+    }
   }
 }
