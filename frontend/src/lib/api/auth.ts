@@ -6,6 +6,17 @@ export interface User {
   email: string;
   name: string | null;
   shareCode: string;
+  // Gamification
+  xp: number;
+  level: number;
+  placesVisitedCount: number;
+  language: string;
+  // Avatar System
+  avatarBase: string;
+  avatarColor: string;
+  avatarAccessory: string | null;
+  avatarBackground: string | null;
+  avatarAnimation: string | null;
 }
 
 export interface AuthResponse {
@@ -69,7 +80,7 @@ export async function getMe(): Promise<User> {
   if (!token) {
     throw new Error('Not authenticated');
   }
-  
+
   return apiRequest<User>('/auth/me', {
     headers: {
       Authorization: `Bearer ${token}`,

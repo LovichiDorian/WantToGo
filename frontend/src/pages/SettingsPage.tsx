@@ -228,6 +228,30 @@ export function SettingsPage() {
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="space-y-4"
           >
+            {/* Avatar Studio Card */}
+            <motion.div
+              onClick={() => navigate('/settings/avatar-studio')}
+              className="glass-card-centered p-5 cursor-pointer hover:shadow-lg transition-shadow"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center shadow-lg text-2xl">
+                  ✨
+                </div>
+                <div className="flex-1">
+                  <p className="font-bold text-lg">Studio Avatar</p>
+                  <p className="text-sm text-muted-foreground">Personnalise ton avatar</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold px-2 py-1 rounded-full bg-primary/10 text-primary">
+                    +100 XP
+                  </span>
+                  <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                </div>
+              </div>
+            </motion.div>
+
             {/* Theme Section */}
             <SettingsSection
               icon={Palette}

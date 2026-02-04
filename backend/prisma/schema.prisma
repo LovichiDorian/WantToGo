@@ -19,6 +19,13 @@ model User {
   placesVisitedCount Int      @default(0)
   language           String   @default("fr") // 'fr' | 'en'
   
+  // Avatar System
+  avatarBase       String   @default("voyageur")  // 12 base styles
+  avatarColor      String   @default("#3B82F6")   // Primary color
+  avatarAccessory  String?  // lunettes, chapeau, sac (unlocked at level 5)
+  avatarBackground String?  // paris, tokyo, etc (unlocked at level 10)
+  avatarAnimation  String?  // spin, wink, wave (unlocked at level 20)
+  
   // Relations existantes
   places      Place[]
   friendships Friendship[] // Les amis que cet utilisateur a ajoutés
@@ -71,6 +78,9 @@ model Place {
   isVisited       Boolean   @default(false)
   visitedAt       DateTime?
   visitedWithGeoloc Boolean @default(false) // Was user within 500m when marking visited
+  
+  // Social features
+  wantToGoCount    Int      @default(0)  // Number of users who want to visit
   
   photos      Photo[]
   tripPlaces  TripPlace[]

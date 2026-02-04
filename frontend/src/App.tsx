@@ -15,6 +15,7 @@ import { AssistantPage } from '@/pages/AssistantPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 import { LeaderboardPage } from '@/pages/LeaderboardPage';
 import { TripsPage } from '@/pages/TripsPage';
+import { AvatarStudio } from '@/pages/AvatarStudio';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 
@@ -118,7 +119,7 @@ function AnimatedRoutes() {
         {/* Public routes */}
         <Route path="/login" element={<PublicRoute><AnimatedPage><LoginPage /></AnimatedPage></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><AnimatedPage><RegisterPage /></AnimatedPage></PublicRoute>} />
-        
+
         {/* Protected routes */}
         <Route path="/" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
           <Route index element={<AnimatedPage><HomePage /></AnimatedPage>} />
@@ -131,6 +132,7 @@ function AnimatedRoutes() {
           <Route path="friends" element={<AnimatedPage><FriendsPage /></AnimatedPage>} />
           <Route path="assistant" element={<AnimatedPage><AssistantPage /></AnimatedPage>} />
           <Route path="settings" element={<AnimatedPage><SettingsPage /></AnimatedPage>} />
+          <Route path="settings/avatar-studio" element={<AnimatedPage><AvatarStudio /></AnimatedPage>} />
           <Route path="profile" element={<AnimatedPage><ProfilePage /></AnimatedPage>} />
           <Route path="leaderboard" element={<AnimatedPage><LeaderboardPage /></AnimatedPage>} />
           <Route path="trips" element={<AnimatedPage><TripsPage /></AnimatedPage>} />
@@ -148,7 +150,7 @@ function AppContent() {
   useEffect(() => {
     // Check if user has completed onboarding
     const hasCompletedOnboarding = localStorage.getItem('wanttogo_onboarding_complete');
-    
+
     if (!hasCompletedOnboarding) {
       setShowOnboarding(true);
     }
